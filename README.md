@@ -32,3 +32,18 @@ Group project primary repository
 4. Manually switch to the develop branch `git checkout develop`
 5. Start meteor `meteor --port $PORT`
 
+## Google Authentication
+1. Go to the [Google APIs Console](https://console.developers.google.com/apis/)
+    1. Use "Create a project...".
+    2. Go to the "Credentials" tab on the left.
+    3. Select the "OAuth consent secreen" at the top. Fill in "Product name shown to users", then click "Save".
+    4. You should end up back at the "Credentials" tab with a prompt about needing credentials to access APIs. Click "Create credentials" and then select "OAuth client ID" from the dropdown list.
+        1. For Application type, select "Web application".
+        2. Populate name as you like.
+        3. For "Authorized JavaScript origins", put in the base domain URI for the application. For example, https://sinking-feeling-nagledb.c9users.io/
+        4. For "Authorized redirect URIs", put in the base domain URI followed by /_oauth/google. For example: https://sinking-feeling-nagledb.c9users.io/_outh/google
+        5. Click "Create"
+    5. You'll be provided with the client ID and client secret. Note these, you'll need them later.
+2. Start up Meteor. You'll need to provide a ROOT_URL environment variable specifying its base URL. For example: ROOT_URL=https://sinking-feeling-nagledb.c9users.io meteor --port $PORT
+3. Visit the running application. You'll see a button logging in with Google. Click it and provide the information it requests.
+4. You should now be able to log in.
