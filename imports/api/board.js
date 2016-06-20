@@ -5,6 +5,7 @@
 import { _ } from 'meteor/underscore';
 
 export const ship_types = ["carrier", "battleship", "cruiser", "submarine", "destroyer"];
+export const ship_lengths = { carrier: 5, battleship: 4, cruiser: 3, submarine: 3, destroyer: 2 };
 
 /**
  * makeBoard()
@@ -30,23 +31,4 @@ export function setRange(board, row, col, rowCount, colCount, val) {
       board[r][c].val = val;
     }
   }
-}
-
-export function placeShip(ship_type, row, col, vertical, game) {
-  if (typeof game.positions == 'undefined')
-  {
-    game.positions = {};
-  }
-  if (typeof game.positions[ship_type] == 'undefined')
-  {
-    game.positions[ship_type] = {};
-  }
-  if(ship_types.indexOf(ship_type) < 0)
-  {
-    throw 'Unrecognised ship type';
-  }
-  
-  game.positions[ship_type].row = row;
-  game.positions[ship_type].col = col;
-  game.positions[ship_type].vertical = vertical;
 }
