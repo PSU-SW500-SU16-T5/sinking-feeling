@@ -1,0 +1,9 @@
+<template name="home">
+  <p>This is the home page.</p>
+  <p>Here are the games that are currently defined:</p>
+  <ul>
+    {{#each games}}
+      <li><a href="/game/{{_id}}">{{_id}}</a></li>
+    {{/each}}
+  </ul>
+</template>

@@ -22,3 +22,5 @@ insecure                # Allow all DB writes from clients (for prototyping)
 practicalmeteor:mocha-console-runner
 practicalmeteor:mocha
 underscore
+kadira:flow-router
+kadira:blaze-layout

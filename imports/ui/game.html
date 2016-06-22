@@ -1,6 +1,11 @@
 <template name="game">
-  <h1>Test Game</h1>
+  <h2>Game</h2>
 
+  {{#if invalid}}
+  <p>Warning: Invalid game ID in URL.</p>
+  {{else}}
+
+  {{#with game}}
   <span class="text">Owner: {{owner_id}}</span>
   <br />
   <span class="text">Game State: {{state}}</span>
@@ -14,7 +19,7 @@
   <br />
   <span class="text" style="font-size:22">Turn {{turn_number}}</span>
   <br />
-
+  {{/with}}
 
 
   <br />
@@ -40,6 +45,7 @@
     <br />
     <input type="submit" value="Submit" />
   </form>
+  {{/if}}
 </template>
 
 <template name="board">

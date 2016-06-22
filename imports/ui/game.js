@@ -1,4 +1,6 @@
-import { Meteor } from 'meteor/meteor';
+/** Configuration for JSHint to recognize automatic globals: */
+/* globals FlowRouter */
+
 import { Games } from '../api/games.js';
 import { getOwnBoard, getAttackBoard } from '../api/game.js';
 import { $ } from 'meteor/jquery';
@@ -6,13 +8,26 @@ import { $ } from 'meteor/jquery';
 import './game.html';
 import './game.css';
 
+function getGame() {
+  const gameID = FlowRouter.getParam('id');
+  return Games.findOne({_id: gameID});
+}
+
 Template.game.helpers({
+  invalid() {
+    return !getGame();
+  },
+  game() {
+    return getGame();
+  },
   ownBoard() {
     //TODO: This is hard-coded to the creator, it really needs to be the current user
-    return getOwnBoard(this, this['current_player']);
+    const game = getGame();
+    return getOwnBoard(game, game['current_player']);
   },
   attackBoard() {
-    return getAttackBoard(this, this['current_player']);
+    const game = getGame();
+    return getAttackBoard(game, game['current_player']);
   }
 });
 
