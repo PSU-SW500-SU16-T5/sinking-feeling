@@ -45,11 +45,33 @@ Template.game.events({
 
       console.log(game.current_player + " taking shot.\nAttempting to hit position: " + selection);
 
-      // Get shot information (TODO: Check if shot is valid!)
-      fire(game, row, col);
-      update(game);
+      try 
+      {
+        const res = fire(game, row, col);
+        update(game);
 
-      $('#selection').val("");
+        switch (res)
+        {
+          case 'HIT':
+            sAlert.success("Well done! That's a hit!", {effect: 'slide'})
+            break;
+          case 'MISS':
+            sAlert.info("Nice try, maybe next time!", {effect: 'slide'});
+            break;
+          case 'SUNK':
+            sAlert.success("Great shot! You sunk a ship!", {effect: 'slide'});
+            break;
+          default:
+            sAlert.warning("The shot was recorded but we received no status! There's something fishy here...", {effect: 'slide'});
+            break;
+        }
+
+        $('#selection').val("");
+      }
+      catch (e)
+      {
+        sAlert.error(e.message, {effect: 'slide'});
+      }
     }
   }
 });

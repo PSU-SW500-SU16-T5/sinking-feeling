@@ -1,14 +1,16 @@
 <template name="layout">
-<div class="spacer"></div>
+  <div class="spacer"></div>
   <div class="far-background">
     <div class="app-space">
-      
+      {{> sAlert}}
       <header><h1 align="center">Sinking Feeling</h1></header>
+      
       <main>
         {{>Template.dynamic template=content}}
+      
       </main>
-      </div>
-      <div class="bottom-float">
+    </div>
+    <div class="bottom-float">
       <footer>
         <div>Team 5 Project for SWENG 500</div>
       </footer>
