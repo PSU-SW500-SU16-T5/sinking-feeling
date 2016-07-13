@@ -143,7 +143,14 @@ module.exports = {
         "no-mixed-spaces-and-tabs": "error",
         "no-multi-spaces": "off",
         "no-multi-str": "error",
-        "no-multiple-empty-lines": "error",
+        "no-multiple-empty-lines": [
+            "error",
+            {
+                "max": 2,
+                "maxBOF": 0,
+                "maxEOF": 1,
+            }
+        ],
         "no-native-reassign": "error",
         "no-negated-condition": "error",
         "no-nested-ternary": "error",
