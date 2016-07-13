@@ -59,7 +59,7 @@ module.exports = {
                 "allowKeywords": true
             }
         ],
-        "eol-last": "off",
+        "eol-last": "error",
         "eqeqeq": "off",
         "func-names": [
             "error",
