@@ -3,12 +3,8 @@ import {_} from 'meteor/underscore';
 export const name = 'ralph';
 export const full_name = 'Random Ralph';
 
-/* jshint -W098 */
-// Disable reporting of unused variables, since we need to accept state but it
-// is unused here.
+// eslint-disable-next-line no-unused-vars
 export function makeMove(board, state) {
-/* jshint +W098 */
-
   let row, col;
   let squares = [];
   for (row = 0; row < 10; row++) {

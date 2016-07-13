@@ -129,24 +129,22 @@ export function create(creator) {
 /* The following functions are intended to handle state changes and associated
  * changes in game data. */
 
+/* eslint-disable no-empty-function */
+
+// eslint-disable-next-line no-unused-vars
 export function checkStateCreated(game) {
-  // Fool JShint into thinking we're using the parameter.
-  game = game;
 }
 
+// eslint-disable-next-line no-unused-vars
 export function checkStateWaiting(game) {
-  // Fool JShint into thinking we're using the parameter.
-  game = game;
 }
 
+// eslint-disable-next-line no-unused-vars
 export function checkStatePending(game) {
-  // Fool JShint into thinking we're using the parameter.
-  game = game;
 }
 
+// eslint-disable-next-line no-unused-vars
 export function checkStateDeclined(game) {
-  // Fool JShint into thinking we're using the parameter.
-  game = game;
 }
 
 export function checkStateSetup(game) {
@@ -190,10 +188,11 @@ export function checkStateActive(game) {
   delete game.current_player;
 }
 
+// eslint-disable-next-line no-unused-vars
 export function checkStateEnded(game) {
-  // Fool JShint into thinking we're using the parameter.
-  game = game;
 }
+
+/* eslint-enable no-empty-function */
 
 export function checkState(game) {
   const states = {
