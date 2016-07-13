@@ -140,6 +140,7 @@ module.exports = {
             }
         ],
         "no-mixed-requires": "error",
+        "no-mixed-spaces-and-tabs": "error",
         "no-multi-spaces": "off",
         "no-multi-str": "error",
         "no-multiple-empty-lines": "error",
