@@ -12,7 +12,7 @@ import * as Ship from './ship.js';
 export function makeEmptyBoard() {
   return _.times(10, function() {
     return _.times(10, function() {
-       return {state: 'E'};
+      return {state: 'E'};
     });
   });
 }

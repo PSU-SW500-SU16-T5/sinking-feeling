@@ -7,21 +7,21 @@ var pwd = AccountsTemplates.removeField('password');
 AccountsTemplates.removeField('email');
 AccountsTemplates.addFields([
   {
-      _id: "username",
-      type: "text",
-      displayName: "username",
-      required: true,
-      minLength: 5,
+    _id: "username",
+    type: "text",
+    displayName: "username",
+    required: true,
+    minLength: 5,
   },
   pwd
 ]);
 
 AccountsTemplates.configure({
-    homeRoutePath: '/',
-    redirectTimeout: 4000,
-    defaultLayout: 'layout',
-    defaultLayoutRegions: {},
-    defaultContentRegion: 'content',
+  homeRoutePath: '/',
+  redirectTimeout: 4000,
+  defaultLayout: 'layout',
+  defaultLayoutRegions: {},
+  defaultContentRegion: 'content',
 });
 
 // /sign-in

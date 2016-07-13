@@ -8,12 +8,12 @@ import './board.less';
 Template.board_cell.helpers({
   className() {
     switch (this.ship.state) {
-      case 'H': return 'hit';
-      case 'M': return 'miss';
-      case 'S': return 'ship';
-      case 'X': return 'sunk';
-      case 'E': return 'empty';
-      default: return '';
+    case 'H': return 'hit';
+    case 'M': return 'miss';
+    case 'S': return 'ship';
+    case 'X': return 'sunk';
+    case 'E': return 'empty';
+    default: return '';
     }
   },
   symbol() {

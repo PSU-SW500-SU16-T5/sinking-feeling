@@ -45,7 +45,7 @@ module.exports = {
         ],
         "complexity": "warn",
         "computed-property-spacing": [
-            "error",
+            "warn",
             "never"
         ],
         "consistent-return": "error",
@@ -73,7 +73,10 @@ module.exports = {
         "id-blacklist": "error",
         "id-length": "off",
         "id-match": "error",
-        "indent": "off",
+        "indent": [
+            "error",
+            2
+        ],
         "init-declarations": "off",
         "jsx-quotes": "error",
         "key-spacing": "error",
