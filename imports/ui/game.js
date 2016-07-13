@@ -51,8 +51,7 @@ Template.game.events({
     const game = getGame();
     const selection = event.target.elements.selection.value;
 
-    if (selection.length === 2)
-    {
+    if (selection.length === 2) {
       const row = parseInt(selection.slice(1, 2), 10);
       const col = convertToIndex(selection.slice(0, 1));
 

@@ -9,12 +9,10 @@ export function overlap(ship, row, col, vertical, ships) {
     var ship_space = { row: row, col: col };
     if(vertical){
       ship_space.row += i;
-    }
-    else{
+    } else {
       ship_space.col += i;
     }
-    if(Board.spaceIsOnShip(ship_space, ships))
-    {
+    if(Board.spaceIsOnShip(ship_space, ships)) {
       return true;
     }
   }
@@ -230,13 +228,10 @@ export function computerShot(game) {
   saveShot(shot, game.challenger.shots);
 }
 
-export function checkShotUnique(shot, previous_shots)
-{
-  for(let i = 0; i < previous_shots.length; i++)
-  {
+export function checkShotUnique(shot, previous_shots) {
+  for(let i = 0; i < previous_shots.length; i++) {
     if((shot.row == previous_shots[i].row) &&
-      (shot.col == previous_shots[i].col))
-    {
+      (shot.col == previous_shots[i].col)) {
       return false;
     }
   }
@@ -244,19 +239,16 @@ export function checkShotUnique(shot, previous_shots)
 }
 
 export function playerShot(game, player, row, col) {
-  if (typeof game[player] == 'undefined')
-  {
+  if (typeof game[player] == 'undefined') {
     game[player] = {};
   }
 
-  if (typeof game[player].shots == 'undefined')
-  {
+  if (typeof game[player].shots == 'undefined') {
     game[player].shots = [];
   }
 
   var shot = {row: row, col: col};
-  if(!checkShotUnique(shot, game[player].shots))
-  {
+  if(!checkShotUnique(shot, game[player].shots)) {
     throw "Shot Exists";
   }
 
@@ -280,12 +272,9 @@ export function fire(game, row, col) {
 // only exported for testing, don't call this
 export function oppositeUser(user){
   var opposite_user = "";
-  if(user == "creator")
-  {
+  if(user == "creator") {
     opposite_user = "challenger";
-  }
-  else
-  {
+  } else {
     opposite_user = "creator";
   }
   return opposite_user;

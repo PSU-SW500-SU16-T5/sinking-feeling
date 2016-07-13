@@ -65,12 +65,9 @@ export function addShips(board, ships, mark) {
 
 export function addShots(board, shots, ships) {
   shots.forEach(function(shot){
-    if(spaceIsOnShip(shot, ships))
-    {
+    if(spaceIsOnShip(shot, ships)) {
       board[shot.row][shot.col].state = 'H';
-    }
-    else
-    {
+    } else {
       board[shot.row][shot.col].state = 'M';
     }
   });
@@ -128,18 +125,15 @@ export function checkSunk(board, ships) {
 
 // only exported for testing, don't call this
 export function spaceIsOnShip(space, ships){
-  for(var ship in ships)
-  {
+  for(var ship in ships) {
     for(let i = 0; i < Ship.lengths[ship]; i++) {
       var ship_space = { row: ships[ship].row, col: ships[ship].col };
       if(ships[ship].vertical){
         ship_space.row += i;
-      }
-      else{
+      } else {
         ship_space.col += i;
       }
-      if(spacesAreSame(space, ship_space))
-      {
+      if(spacesAreSame(space, ship_space)) {
         return true;
       }
     }
@@ -149,8 +143,7 @@ export function spaceIsOnShip(space, ships){
 
 // only exported for testing, don't call this
 export function spacesAreSame(space1, space2){
-  if((space1.row == space2.row) && (space1.col == space2.col))
-  {
+  if((space1.row == space2.row) && (space1.col == space2.col)) {
     return true;
   }
   return false;

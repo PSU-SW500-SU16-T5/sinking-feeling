@@ -31,7 +31,7 @@ module.exports = {
         ],
         "block-scoped-var": "error",
         "block-spacing": "error",
-        "brace-style": "off",
+        "brace-style": "warn",
         "callback-return": "error",
         "camelcase": "off",
         "comma-dangle": [
