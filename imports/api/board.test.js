@@ -3,8 +3,8 @@ import * as Board from './board.js';
 
 export function checkBoard(expected, board) {
   let r, c;
-  for(r = 0; r < 10; r++) {
-    for(c = 0; c < 10; c++) {
+  for (r = 0; r < 10; r++) {
+    for (c = 0; c < 10; c++) {
       assert.equal(expected[r][c], board[r][c].state, "row: " + r.toString() + " col: " + c.toString());
     }
   }
@@ -20,7 +20,7 @@ describe('api/board.js', function() {
     it('returns an array with rows of size 10', function () {
       const board = Board.makeEmptyBoard();
       assert.isArray(board);
-      for(let row of board) {
+      for (let row of board) {
         assert.isArray(row);
         assert(row.length, 10);
       }
@@ -28,9 +28,9 @@ describe('api/board.js', function() {
     it('returns an array with all cells empty', function () {
       const board = Board.makeEmptyBoard();
       assert.isArray(board);
-      for(let row of board) {
+      for (let row of board) {
         assert.isArray(row);
-        for(let cell of row) {
+        for (let cell of row) {
           assert.propertyVal(cell, 'state', 'E');
         }
       }

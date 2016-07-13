@@ -14,7 +14,7 @@ export function makeMove(board, state) {
   }
   squares = _.shuffle(squares);
 
-  for(let square of squares) {
+  for (let square of squares) {
     const row = square[0];
     const col = square[1];
     if (board[row][col].state == "E") return {row: row, col: col};

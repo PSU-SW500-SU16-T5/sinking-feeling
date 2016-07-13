@@ -16,10 +16,10 @@ function getGame() {
 
 function getPlayer(game) {
   const user = Meteor.user();
-  if(user._id === game.creator.id) {
+  if (user._id === game.creator.id) {
     return 'creator';
   }
-  if(user._id === game.challenger.id) {
+  if (user._id === game.challenger.id) {
     return 'challenger';
   }
   // TODO: Must be a guest, default to creator for now. Do we even want guests

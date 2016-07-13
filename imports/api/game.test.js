@@ -325,7 +325,7 @@ describe('api/game.js', function() {
             },
           };
 
-          if(winner == 'challenger') {
+          if (winner == 'challenger') {
             const temp = game.challenger;
             game.challenger = game.creator;
             game.creator = temp;

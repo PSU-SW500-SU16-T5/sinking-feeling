@@ -5,14 +5,14 @@ import {Games} from './games.js';
 import {_} from 'meteor/underscore';
 
 export function overlap(ship, row, col, vertical, ships) {
-  for(let i = 0; i < Ship.lengths[ship]; i++) {
+  for (let i = 0; i < Ship.lengths[ship]; i++) {
     var ship_space = { row: row, col: col };
-    if(vertical){
+    if (vertical){
       ship_space.row += i;
     } else {
       ship_space.col += i;
     }
-    if(Board.spaceIsOnShip(ship_space, ships)) {
+    if (Board.spaceIsOnShip(ship_space, ships)) {
       return true;
     }
   }
@@ -26,7 +26,7 @@ export function checkOverlap(ship_type, row, col, vertical, positions) {
     positions = JSON.parse(JSON.stringify(positions));
     delete positions[ship_type];
   }
-  if(overlap(ship_type, row, col, vertical, positions)){
+  if (overlap(ship_type, row, col, vertical, positions)){
     throw 'Ships Overlapping';
   }
 }
@@ -37,7 +37,7 @@ export function placeShip(ship_type, row, col, vertical, positions) {
   if (typeof positions[ship_type] == 'undefined') {
     positions[ship_type] = {};
   }
-  if(Ship.types.indexOf(ship_type) < 0) {
+  if (Ship.types.indexOf(ship_type) < 0) {
     throw 'Unrecognised ship type';
   }
 
@@ -64,7 +64,7 @@ export function randomizeShips(ships) {
       try {
         placeShip(type, possib[0], possib[1], possib[2], ships);
         return true;
-      } catch(e) {
+      } catch (e) {
         return false;
       }
     });
@@ -146,8 +146,8 @@ export function checkStateDeclined(game) {
 }
 
 export function checkStateSetup(game) {
-  if(!game.creator.ready) return;
-  if(!game.challenger.ready) return;
+  if (!game.creator.ready) return;
+  if (!game.challenger.ready) return;
 
   delete game.creator.ready;
   game.creator.shots = [];
@@ -157,7 +157,7 @@ export function checkStateSetup(game) {
 
   game.state = 'active';
 
-  if(!('first_player' in game)) {
+  if (!('first_player' in game)) {
     game.first_player = 'creator';
   }
   game.current_player = game.first_player;
@@ -171,13 +171,13 @@ export function checkStateActive(game) {
   const challenger = getAttackBoard(game, 'challenger').sunk;
 
   let winner = false;
-  if(creator.length == 5) {
+  if (creator.length == 5) {
     winner = 'creator';
-  } else if(challenger.length == 5) {
+  } else if (challenger.length == 5) {
     winner = 'challenger';
   }
 
-  if(!winner) return;
+  if (!winner) return;
 
   game.state = 'ended';
   game.winner = winner;
@@ -203,7 +203,7 @@ export function checkState(game) {
     ended: checkStateEnded,
   };
 
-  if(game.state in states) {
+  if (game.state in states) {
     states[game.state](game);
   } else {
     throw Meteor.Error('invalid-state', 'The game has an invalid state');
@@ -229,8 +229,8 @@ export function computerShot(game) {
 }
 
 export function checkShotUnique(shot, previous_shots) {
-  for(let i = 0; i < previous_shots.length; i++) {
-    if((shot.row == previous_shots[i].row) &&
+  for (let i = 0; i < previous_shots.length; i++) {
+    if ((shot.row == previous_shots[i].row) &&
       (shot.col == previous_shots[i].col)) {
       return false;
     }
@@ -248,7 +248,7 @@ export function playerShot(game, player, row, col) {
   }
 
   var shot = {row: row, col: col};
-  if(!checkShotUnique(shot, game[player].shots)) {
+  if (!checkShotUnique(shot, game[player].shots)) {
     throw "Shot Exists";
   }
 
@@ -272,7 +272,7 @@ export function fire(game, row, col) {
 // only exported for testing, don't call this
 export function oppositeUser(user){
   var opposite_user = "";
-  if(user == "creator") {
+  if (user == "creator") {
     opposite_user = "challenger";
   } else {
     opposite_user = "creator";

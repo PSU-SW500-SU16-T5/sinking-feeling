@@ -15,7 +15,7 @@ Template.home.helpers({
 Template.home.events({
   'click #createGame'() {
     const user = Meteor.user();
-    if(!user) throw Meteor.error('not-logged-in');
+    if (!user) throw Meteor.error('not-logged-in');
 
     const game = Game.create(user);
     game.current_player = "creator";

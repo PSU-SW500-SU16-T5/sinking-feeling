@@ -66,17 +66,17 @@ describe('api/ai.js', function() {
             const move = ai.makeMove(board, state);
             board[move.row][move.col].state = 'X';
           };
-          for(let i = 0; i < 100; i++) {
+          for (let i = 0; i < 100; i++) {
             makeMove();
           }
           assert.throws(makeMove, Meteor.error, 'no-moves-left');
         });
-        if(name != 'invalid-name') {
+        if (name != 'invalid-name') {
           it('treats name without case sensitivity', function() {
             // Create a copy of the name where each character has alternating
             // case
             const garbled = _.map(name.split(''), function(c,i) {
-              if(i % 2 === 0) {
+              if (i % 2 === 0) {
                 return c.toUpperCase();
               } else {
                 return c.toLowerCase();

@@ -80,7 +80,7 @@ module.exports = {
         "init-declarations": "off",
         "jsx-quotes": "error",
         "key-spacing": "error",
-        "keyword-spacing": "off",
+        "keyword-spacing": "error",
         "linebreak-style": [
             "error",
             "unix"

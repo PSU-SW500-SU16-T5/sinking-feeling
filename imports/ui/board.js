@@ -25,9 +25,9 @@ Template.board_cell.helpers({
     };
 
     let img = 'Water';
-    if(this.ship.state == 'S') {
+    if (this.ship.state == 'S') {
       img = 'Ship' + this.ship.ship;
-    } else if(this.ship.state in states) {
+    } else if (this.ship.state in states) {
       img = states[this.ship.state];
     } else {
       img = 'Water';
@@ -36,8 +36,8 @@ Template.board_cell.helpers({
     return '../graphics/' + img + '.svg';
   },
   clickable() {
-    if(this.game.state === 'active') {
-      if(!this.own) return 'clickable';
+    if (this.game.state === 'active') {
+      if (!this.own) return 'clickable';
     }
     return '';
   },
