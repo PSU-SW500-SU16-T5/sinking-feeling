@@ -12,7 +12,7 @@ describe('api/ships.js', function() {
       });
     });
   });
-  
+
   describe('lengths', function() {
     it('is an object', function() {
       assert.isObject(Ship.lengths);

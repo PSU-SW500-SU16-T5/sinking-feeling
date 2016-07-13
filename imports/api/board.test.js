@@ -84,7 +84,7 @@ describe('api/board.js', function() {
         "EEEEEEEEEE",
         "EEEEEEEEEE",
         "EEEEEEEEEE",
-        "EEEEEEEEEE",	
+        "EEEEEEEEEE",
         "EEEEEEEEEE",
       ];
       testBoard(exp, 0, 0, 5, 1, 'X');

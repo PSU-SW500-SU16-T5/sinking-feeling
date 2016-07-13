@@ -1,6 +1,6 @@
 /* globals AccountsTemplates */
 
-// This removes the password field but returns it, 
+// This removes the password field but returns it,
 // so that we can re-add it later, preserving the
 // desired order of the fields
 var pwd = AccountsTemplates.removeField('password');
