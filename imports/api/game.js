@@ -47,7 +47,7 @@ export function placeShip(ship_type, row, col, vertical, positions) {
 }
 
 export function randomizeShips(ships) {
-  const makePossibilities = function (length) {
+  const makePossibilities = function(length) {
     let i, j;
     const result = [];
     for (i = 0; i < 10; i++) {

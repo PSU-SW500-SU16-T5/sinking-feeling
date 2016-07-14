@@ -12,12 +12,12 @@ export function checkBoard(expected, board) {
 
 describe("api/board.js", function() {
   describe("makeBoard", function() {
-    it("returns an array of size 10", function () {
+    it("returns an array of size 10", function() {
       const board = Board.makeEmptyBoard();
       assert.isArray(board);
       assert(board.length, 10);
     });
-    it("returns an array with rows of size 10", function () {
+    it("returns an array with rows of size 10", function() {
       const board = Board.makeEmptyBoard();
       assert.isArray(board);
       for (let row of board) {
@@ -25,7 +25,7 @@ describe("api/board.js", function() {
         assert(row.length, 10);
       }
     });
-    it("returns an array with all cells empty", function () {
+    it("returns an array with all cells empty", function() {
       const board = Board.makeEmptyBoard();
       assert.isArray(board);
       for (let row of board) {

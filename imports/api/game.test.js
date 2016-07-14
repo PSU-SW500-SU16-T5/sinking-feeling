@@ -437,7 +437,7 @@ describe("api/game.js", function() {
       assert.equal(0, game.challenger.shots[0].row);
       assert.equal(0, game.challenger.shots[0].col);
     });
-    it("includes the time", function () {
+    it("includes the time", function() {
       const game = {
         creator: {
           ships: {},
@@ -476,7 +476,7 @@ describe("api/game.js", function() {
   });
 
   describe("player shot", function() {
-    it("added to array", function () {
+    it("added to array", function() {
       var row = 7;
       var col = 8;
       const game = {creator: {shots: [{row: 0, col: 0}]}};
@@ -487,7 +487,7 @@ describe("api/game.js", function() {
       assert.equal(row, game.creator.shots[1].row);
       assert.equal(col, game.creator.shots[1].col);
     });
-    it("challenger shot", function () {
+    it("challenger shot", function() {
       var row = 7;
       var col = 8;
       var player = "challenger";
@@ -500,7 +500,7 @@ describe("api/game.js", function() {
       assert.equal(row, game[player].shots[1].row);
       assert.equal(col, game[player].shots[1].col);
     });
-    it("first shot", function () {
+    it("first shot", function() {
       var row = 7;
       var col = 8;
       var player = "creator";
@@ -519,7 +519,7 @@ describe("api/game.js", function() {
         Game.playerShot(game, "creator", row, col);
       }, "Shot Exists");
     });
-    it("includes the time", function () {
+    it("includes the time", function() {
       const game = {creator: {shots: []}};
 
       Game.playerShot(game, "creator", 0, 0);
@@ -739,7 +739,7 @@ describe("api/game.js", function() {
   });
 
   describe("randomizeShips", function() {
-    it("should change the positions of the ships", function () {
+    it("should change the positions of the ships", function() {
       const ships1 = Game.initShips();
       const ships2 = {};
       Ship.types.forEach(type => {
