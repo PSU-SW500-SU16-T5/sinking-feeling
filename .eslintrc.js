@@ -264,7 +264,7 @@ module.exports = {
                 "named": "never"
             }
         ],
-        "space-in-parens": "off",
+        "space-in-parens": "error",
         "space-infix-ops": "off",
         "space-unary-ops": "error",
         "spaced-comment": "off",

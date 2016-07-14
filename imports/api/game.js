@@ -211,7 +211,7 @@ export function checkState(game) {
 }
 
 export function update(game) {
-  Games.update( {_id: game._id}, game);
+  Games.update({_id: game._id}, game);
 }
 
 export function saveShot(shot, shots) {
