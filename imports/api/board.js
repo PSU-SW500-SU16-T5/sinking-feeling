@@ -2,8 +2,8 @@
  * Utility code for working with boards.
  */
 
-import { _ } from 'meteor/underscore';
-import * as Ship from './ship.js';
+import { _ } from "meteor/underscore";
+import * as Ship from "./ship.js";
 
 /**
  * makeBoard()
@@ -12,7 +12,7 @@ import * as Ship from './ship.js';
 export function makeEmptyBoard() {
   return _.times(10, function() {
     return _.times(10, function() {
-      return {state: 'E'};
+      return {state: "E"};
     });
   });
 }
@@ -43,22 +43,22 @@ export function addShips(board, ships, mark) {
 
     if (ship.vertical) {
       if (mark) {
-        setRange(board, row, col, len, 1, 'state', 'S');
+        setRange(board, row, col, len, 1, "state", "S");
       }
-      board[row][col].ship = 'Top';
+      board[row][col].ship = "Top";
       if (len > 2) {
-        setRange(board, row+1, col, len-2, 1, 'ship', 'Vertical');
+        setRange(board, row+1, col, len-2, 1, "ship", "Vertical");
       }
-      board[row+len-1][col].ship = 'Bottom';
+      board[row+len-1][col].ship = "Bottom";
     } else {
       if (mark) {
-        setRange(board, row, col, 1, len, 'state', 'S');
+        setRange(board, row, col, 1, len, "state", "S");
       }
-      board[row][col].ship = 'Left';
+      board[row][col].ship = "Left";
       if (len > 2) {
-        setRange(board, row, col+1, 1, len-2, 'ship', 'Horizontal');
+        setRange(board, row, col+1, 1, len-2, "ship", "Horizontal");
       }
-      board[row][col+len-1].ship = 'Right';
+      board[row][col+len-1].ship = "Right";
     }
   }
 }
@@ -66,9 +66,9 @@ export function addShips(board, ships, mark) {
 export function addShots(board, shots, ships) {
   shots.forEach(function(shot){
     if (spaceIsOnShip(shot, ships)) {
-      board[shot.row][shot.col].state = 'H';
+      board[shot.row][shot.col].state = "H";
     } else {
-      board[shot.row][shot.col].state = 'M';
+      board[shot.row][shot.col].state = "M";
     }
   });
 }
@@ -84,11 +84,11 @@ export function checkSunk(board, ships) {
 
   const notHit = (board, ship, offset) => {
     if (ship.vertical) {
-      if (board[ship.row+offset][ship.col].state !== 'H') {
+      if (board[ship.row+offset][ship.col].state !== "H") {
         return true;
       }
     } else {
-      if (board[ship.row][ship.col+offset].state !== 'H') {
+      if (board[ship.row][ship.col+offset].state !== "H") {
         return true;
       }
     }
@@ -113,9 +113,9 @@ export function checkSunk(board, ships) {
     if (sunk) {
       sunk_ships.push(type);
       if (ship.vertical) {
-        setRange(board, ship.row, ship.col, len, 1, 'state', 'X');
+        setRange(board, ship.row, ship.col, len, 1, "state", "X");
       } else {
-        setRange(board, ship.row, ship.col, 1, len, 'state', 'X');
+        setRange(board, ship.row, ship.col, 1, len, "state", "X");
       }
     }
   }

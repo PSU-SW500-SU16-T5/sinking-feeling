@@ -232,7 +232,13 @@ module.exports = {
         "prefer-spread": "error",
         "prefer-template": "off",
         "quote-props": "off",
-        "quotes": "off",
+        "quotes": [
+            "error",
+            "double",
+            {
+                "avoidEscape": true
+            }
+        ],
         "radix": [
             "error",
             "always"

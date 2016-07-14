@@ -1,18 +1,18 @@
-import { Meteor } from 'meteor/meteor';
+import { Meteor } from "meteor/meteor";
 
 /**
  * Symbolic name of this AI.
  * @constant {String}
  * @default
  */
-export const name = 'sue';
+export const name = "sue";
 
 /**
  * User-friendly name of this AI.
  * @constant {String}
  * @default
  */
-export const full_name = 'Sequential Sue';
+export const full_name = "Sequential Sue";
 
 /**
  * Return the move that Sue would like to make next.
@@ -35,5 +35,5 @@ export function makeMove(board, state) {
       if (board[row][col].state === "E") return {row: row, col: col};
     }
   }
-  throw new Meteor.Error('no-moves-left', 'No more moves are possible');
+  throw new Meteor.Error("no-moves-left", "No more moves are possible");
 }

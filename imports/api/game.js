@@ -1,8 +1,8 @@
-import * as AI from './ai.js';
-import * as Board from './board.js';
-import * as Ship from './ship.js';
-import {Games} from './games.js';
-import {_} from 'meteor/underscore';
+import * as AI from "./ai.js";
+import * as Board from "./board.js";
+import * as Ship from "./ship.js";
+import {Games} from "./games.js";
+import {_} from "meteor/underscore";
 
 export function overlap(ship, row, col, vertical, ships) {
   for (let i = 0; i < Ship.lengths[ship]; i++) {
@@ -20,25 +20,25 @@ export function overlap(ship, row, col, vertical, ships) {
 }
 
 export function checkOverlap(ship_type, row, col, vertical, positions) {
-  if (typeof positions[ship_type] != 'undefined'){
+  if (typeof positions[ship_type] != "undefined"){
     // This is moving a ship, we don't want to include the pre-move ship in the
     // overlap test. This makes a copy that we can remove it from.
     positions = JSON.parse(JSON.stringify(positions));
     delete positions[ship_type];
   }
   if (overlap(ship_type, row, col, vertical, positions)){
-    throw 'Ships Overlapping';
+    throw "Ships Overlapping";
   }
 }
 
 export function placeShip(ship_type, row, col, vertical, positions) {
   checkOverlap(ship_type, row, col, vertical, positions);
 
-  if (typeof positions[ship_type] == 'undefined') {
+  if (typeof positions[ship_type] == "undefined") {
     positions[ship_type] = {};
   }
   if (Ship.types.indexOf(ship_type) < 0) {
-    throw 'Unrecognised ship type';
+    throw "Unrecognised ship type";
   }
 
   positions[ship_type].row = row;
@@ -98,7 +98,7 @@ export function create(creator) {
     // 'created' eventually to indicate that the game is created but not fully
     // initialized (i.e., it will require the caller to send it into waiting,
     // pending, or setup depending on what the user wants).
-    state: 'setup',
+    state: "setup",
   };
 
   randomizeShips(game.creator.ships);
@@ -106,8 +106,8 @@ export function create(creator) {
 
   // TODO: This hard-codes the opponent as an AI. When AI selection is
   // implemented, this three assignments should get moved out.
-  game.challenger.ai = 'sue';
-  game.challenger.name = AI.getPlayer('sue').full_name;
+  game.challenger.ai = "sue";
+  game.challenger.name = AI.getPlayer("sue").full_name;
   game.challenger.ready = true;
 
   // TODO: This changes setup to active and should go away when we implement
@@ -155,10 +155,10 @@ export function checkStateSetup(game) {
   delete game.challenger.ready;
   game.challenger.shots = [];
 
-  game.state = 'active';
+  game.state = "active";
 
-  if (!('first_player' in game)) {
-    game.first_player = 'creator';
+  if (!("first_player" in game)) {
+    game.first_player = "creator";
   }
   game.current_player = game.first_player;
 
@@ -167,19 +167,19 @@ export function checkStateSetup(game) {
 }
 
 export function checkStateActive(game) {
-  const creator = getAttackBoard(game, 'creator').sunk;
-  const challenger = getAttackBoard(game, 'challenger').sunk;
+  const creator = getAttackBoard(game, "creator").sunk;
+  const challenger = getAttackBoard(game, "challenger").sunk;
 
   let winner = false;
   if (creator.length == 5) {
-    winner = 'creator';
+    winner = "creator";
   } else if (challenger.length == 5) {
-    winner = 'challenger';
+    winner = "challenger";
   }
 
   if (!winner) return;
 
-  game.state = 'ended';
+  game.state = "ended";
   game.winner = winner;
   game.time_finished = new Date();
 
@@ -206,7 +206,7 @@ export function checkState(game) {
   if (game.state in states) {
     states[game.state](game);
   } else {
-    throw Meteor.Error('invalid-state', 'The game has an invalid state');
+    throw Meteor.Error("invalid-state", "The game has an invalid state");
   }
 }
 
@@ -222,8 +222,8 @@ export function saveShot(shot, shots) {
 export function computerShot(game) {
   const ai = AI.getPlayer(game.challenger.ai);
   let state = {};
-  if ('computer_state' in game) state = game.computer_state;
-  const board = getAttackBoard(game, 'challenger').squares;
+  if ("computer_state" in game) state = game.computer_state;
+  const board = getAttackBoard(game, "challenger").squares;
   const shot = ai.makeMove(board, state);
   saveShot(shot, game.challenger.shots);
 }
@@ -239,11 +239,11 @@ export function checkShotUnique(shot, previous_shots) {
 }
 
 export function playerShot(game, player, row, col) {
-  if (typeof game[player] == 'undefined') {
+  if (typeof game[player] == "undefined") {
     game[player] = {};
   }
 
-  if (typeof game[player].shots == 'undefined') {
+  if (typeof game[player].shots == "undefined") {
     game[player].shots = [];
   }
 
@@ -259,7 +259,7 @@ export function fire(game, row, col) {
   let player = game.current_player;
   playerShot(game, player, row, col);
 
-  if ('ai' in game.challenger) {
+  if ("ai" in game.challenger) {
     computerShot(game);
     game.turn_number += 2;
   } else {

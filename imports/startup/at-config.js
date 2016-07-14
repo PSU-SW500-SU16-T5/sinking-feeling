@@ -3,8 +3,8 @@
 // This removes the password field but returns it,
 // so that we can re-add it later, preserving the
 // desired order of the fields
-var pwd = AccountsTemplates.removeField('password');
-AccountsTemplates.removeField('email');
+var pwd = AccountsTemplates.removeField("password");
+AccountsTemplates.removeField("email");
 AccountsTemplates.addFields([
   {
     _id: "username",
@@ -17,14 +17,14 @@ AccountsTemplates.addFields([
 ]);
 
 AccountsTemplates.configure({
-  homeRoutePath: '/',
+  homeRoutePath: "/",
   redirectTimeout: 4000,
-  defaultLayout: 'layout',
+  defaultLayout: "layout",
   defaultLayoutRegions: {},
-  defaultContentRegion: 'content',
+  defaultContentRegion: "content",
 });
 
 // /sign-in
-AccountsTemplates.configureRoute('signIn');
+AccountsTemplates.configureRoute("signIn");
 // /sign-up
-AccountsTemplates.configureRoute('signUp');
+AccountsTemplates.configureRoute("signUp");

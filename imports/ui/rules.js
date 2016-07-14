@@ -1,1 +1,1 @@
-import './rules.html';
+import "./rules.html";

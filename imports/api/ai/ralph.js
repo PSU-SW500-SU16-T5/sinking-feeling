@@ -1,7 +1,7 @@
-import {_} from 'meteor/underscore';
+import {_} from "meteor/underscore";
 
-export const name = 'ralph';
-export const full_name = 'Random Ralph';
+export const name = "ralph";
+export const full_name = "Random Ralph";
 
 // eslint-disable-next-line no-unused-vars
 export function makeMove(board, state) {
@@ -20,5 +20,5 @@ export function makeMove(board, state) {
     if (board[row][col].state == "E") return {row: row, col: col};
   }
 
-  throw new Meteor.Error('no-moves-left', 'No more moves are possible');
+  throw new Meteor.Error("no-moves-left", "No more moves are possible");
 }
