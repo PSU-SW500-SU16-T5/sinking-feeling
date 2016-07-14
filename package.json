@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "start": "meteor run",
-    "lint": "jshint .",
+    "lint": "eslint .",
+    "lint-fix": "eslint --fix .",
     "pretest": "meteor npm run lint",
     "test": "meteor test --once --driver-package dispatch:mocha-phantomjs",
     "test-watch": "meteor test --driver-package practicalmeteor:mocha --port 8082"
@@ -12,6 +13,6 @@
     "meteor-node-stubs": "~0.2.0"
   },
   "devDependencies": {
-    "jshint": "^2.9.2"
+    "eslint": "latest"
   }
 }

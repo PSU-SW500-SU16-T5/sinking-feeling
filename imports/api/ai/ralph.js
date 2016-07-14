@@ -1,14 +1,10 @@
-import {_} from 'meteor/underscore';
+import {_} from "meteor/underscore";
 
-export const name = 'ralph';
-export const full_name = 'Random Ralph';
+export const name = "ralph";
+export const full_name = "Random Ralph";
 
-/* jshint -W098 */
-// Disable reporting of unused variables, since we need to accept state but it
-// is unused here.
+// eslint-disable-next-line no-unused-vars
 export function makeMove(board, state) {
-/* jshint +W098 */
-
   let row, col;
   let squares = [];
   for (row = 0; row < 10; row++) {
@@ -18,11 +14,11 @@ export function makeMove(board, state) {
   }
   squares = _.shuffle(squares);
 
-  for(let square of squares) {
+  for (let square of squares) {
     const row = square[0];
     const col = square[1];
     if (board[row][col].state == "E") return {row: row, col: col};
   }
 
-  throw new Meteor.Error('no-moves-left', 'No more moves are possible');
+  throw new Meteor.Error("no-moves-left", "No more moves are possible");
 }

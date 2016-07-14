@@ -7,13 +7,13 @@
  */
 
 // Import all of the AI players
-import * as AI_Sue from './ai/sue.js';
-import * as AI_Ralph from './ai/ralph.js';
+import * as AI_Sue from "./ai/sue.js";
+import * as AI_Ralph from "./ai/ralph.js";
 
 // Manually map each AI player with its name
 const ai_players = {
-  'sue': AI_Sue,
-  'ralph': AI_Ralph,
+  "sue": AI_Sue,
+  "ralph": AI_Ralph,
 };
 
 /**
@@ -21,7 +21,7 @@ const ai_players = {
  * @const {string}
  * @default
  */
-export const default_name = 'sue';
+export const default_name = "sue";
 
 /**
  * Retrieve AI player symbolic names.
