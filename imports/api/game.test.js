@@ -45,17 +45,17 @@ describe("api/game.js", function() {
       assert.equal(user._id, game.creator.id);
       assert.equal(user.username, game.creator.name);
     });
-    it("should get saved to the database", function(){
+    it("should get saved to the database", function() {
       Game.create(user);
 
       const result = Games.findOne({"creator.id": user._id});
 
       assert.equal(user.username, result.creator.name);
     });
-    it("should populate ships for both players", function(){
+    it("should populate ships for both players", function() {
       const game = Game.create(user);
 
-      Ship.types.forEach(function(type){
+      Ship.types.forEach(function(type) {
         assert.isDefined(game.creator.ships[type]);
         assert.isDefined(game.challenger.ships[type]);
       });
@@ -63,11 +63,11 @@ describe("api/game.js", function() {
   });
   describe("update", function() {
     let user = {};
-    beforeEach(function(){
+    beforeEach(function() {
       Meteor.call("test.resetDatabase");
       user = {_id: "test", username: "Test User"};
     });
-    it("should update as expected", function(){
+    it("should update as expected", function() {
       const game = Game.create(user);
       const gameID = game._id;
 
@@ -455,7 +455,7 @@ describe("api/game.js", function() {
   });
 
   describe("check shot doesnt exit", function() {
-    it("first shot", function(){
+    it("first shot", function() {
       const shot = {row: 0, col: 0};
       const shots = [];
 
@@ -636,8 +636,8 @@ describe("api/game.js", function() {
     });
   });
 
-  describe("overlap", function(){
-    it("single space", function(){
+  describe("overlap", function() {
+    it("single space", function() {
       const expected = true;
       const positions = {cruiser: { row: 0, col: 0, vertical: true}};
       const test_type = "submarine";
@@ -650,7 +650,7 @@ describe("api/game.js", function() {
 
       assert.equal(expected, result);
     });
-    it("nothing", function(){
+    it("nothing", function() {
       const expected = false;
       const positions = {cruiser: { row: 0, col: 0, vertical: true}};
       const test_type = "submarine";
@@ -666,7 +666,7 @@ describe("api/game.js", function() {
   });
 
   describe("placeShip", function() {
-    it("vertical at origin", function(){
+    it("vertical at origin", function() {
       var positions = {};
       var row = 0;
       var col = 0;
@@ -679,14 +679,14 @@ describe("api/game.js", function() {
       assert.equal(col, positions.carrier.col);
       assert.equal(vertical, positions.carrier.vertical);
     });
-    it("all five", function(){
+    it("all five", function() {
       var positions = {};
       var ships = ["carrier", "battleship", "cruiser", "submarine", "destroyer"];
       var row = 0;
       var col = 0;
       var vertical = true;
 
-      ships.forEach(function(shipType){
+      ships.forEach(function(shipType) {
         Game.placeShip(shipType, row, col, vertical, positions);
         col++;
       });
@@ -698,7 +698,7 @@ describe("api/game.js", function() {
       assert.equal(3, positions.submarine.col);
       assert.equal(4, positions.destroyer.col);
     });
-    it("change existing", function(){
+    it("change existing", function() {
       var positions = {};
       var ship = "carrier";
       var row = 0;
@@ -712,24 +712,24 @@ describe("api/game.js", function() {
       assert.equal(1, Object.keys(positions).length);
       assert.equal(col2, positions.carrier.col);
     });
-    it("invalid type", function(){
+    it("invalid type", function() {
       var invalid_ship = "pt boat";
-      expect(function(){
+      expect(function() {
         Game.placeShip(invalid_ship, 0, 0, true, {});
       }).to.throw("Unrecognised ship type");
     });
-    it("ship overlaps another", function(){
+    it("ship overlaps another", function() {
       const positions = {};
       Game.placeShip("carrier", 0, 0, true, positions);
       Game.placeShip("battleship", 0, 1, true, positions);
 
-      assert.throw(function(){
+      assert.throw(function() {
         Game.placeShip("battleship", 0, 0, true, positions);
       }, "Ships Overlapping");
 
       assert.equal(0, positions.carrier.col); // Still there
     });
-    it("move overlaps same", function(){
+    it("move overlaps same", function() {
       const positions = {};
       Game.placeShip("carrier", 0, 0, true, positions);
       Game.placeShip("carrier", 1, 0, true, positions);
@@ -906,7 +906,7 @@ describe("api/game.js", function() {
       assert.equal(board[3][1].ship, "Bottom");
       assert.equal(board[4][0].ship, "Bottom");
     });
-    it("should work when shots are present", function(){
+    it("should work when shots are present", function() {
       const exp = [
         "HEEEEEEEEE",
         "SMEEEEEEEE",
@@ -941,8 +941,8 @@ describe("api/game.js", function() {
     });
   });
 
-  describe("opposite user", function(){
-    it("creator", function(){
+  describe("opposite user", function() {
+    it("creator", function() {
       var user = "creator";
       var expected = "challenger";
 
@@ -950,7 +950,7 @@ describe("api/game.js", function() {
 
       assert.equal(expected, result);
     });
-    it("challenger", function(){
+    it("challenger", function() {
       var user = "challenger";
       var expected = "creator";
 
@@ -959,8 +959,8 @@ describe("api/game.js", function() {
       assert.equal(expected, result);
     });
   });
-  describe("getAttackBoard", function(){
-    it("empty board", function(){
+  describe("getAttackBoard", function() {
+    it("empty board", function() {
       const exp = [
         "EEEEEEEEEE",
         "EEEEEEEEEE",
@@ -984,7 +984,7 @@ describe("api/game.js", function() {
 
       checkBoard(exp, board);
     });
-    it("only no ships", function(){
+    it("only no ships", function() {
       const exp = [
         "MEEEEEEEEE",
         "EEEEEEEEEE",
@@ -1010,7 +1010,7 @@ describe("api/game.js", function() {
 
       checkBoard(exp, board);
     });
-    it("hit and miss", function(){
+    it("hit and miss", function() {
       const exp = [
         "HEEEEEEEEE",
         "EMEEEEEEEE",

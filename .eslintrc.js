@@ -256,7 +256,7 @@ module.exports = {
         ],
         "sort-imports": "off",
         "sort-vars": "off",
-        "space-before-blocks": "off",
+        "space-before-blocks": "error",
         "space-before-function-paren": "off",
         "space-in-parens": "off",
         "space-infix-ops": "off",

@@ -7,7 +7,7 @@ import {_} from "meteor/underscore";
 export function overlap(ship, row, col, vertical, ships) {
   for (let i = 0; i < Ship.lengths[ship]; i++) {
     var ship_space = { row: row, col: col };
-    if (vertical){
+    if (vertical) {
       ship_space.row += i;
     } else {
       ship_space.col += i;
@@ -20,13 +20,13 @@ export function overlap(ship, row, col, vertical, ships) {
 }
 
 export function checkOverlap(ship_type, row, col, vertical, positions) {
-  if (typeof positions[ship_type] != "undefined"){
+  if (typeof positions[ship_type] != "undefined") {
     // This is moving a ship, we don't want to include the pre-move ship in the
     // overlap test. This makes a copy that we can remove it from.
     positions = JSON.parse(JSON.stringify(positions));
     delete positions[ship_type];
   }
-  if (overlap(ship_type, row, col, vertical, positions)){
+  if (overlap(ship_type, row, col, vertical, positions)) {
     throw "Ships Overlapping";
   }
 }
@@ -270,7 +270,7 @@ export function fire(game, row, col) {
 
 
 // only exported for testing, don't call this
-export function oppositeUser(user){
+export function oppositeUser(user) {
   var opposite_user = "";
   if (user == "creator") {
     opposite_user = "challenger";
