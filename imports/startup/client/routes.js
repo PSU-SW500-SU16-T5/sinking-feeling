@@ -26,3 +26,10 @@ FlowRouter.route('/rules', {
     BlazeLayout.render('layout', {content: 'rules'});
   }
 });
+
+import '/imports/ui/http404.js';
+FlowRouter.notFound = {
+  action: function() {
+    BlazeLayout.render('layout', {content: 'http404'});
+  },
+};

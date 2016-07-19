@@ -1,3 +1,12 @@
 {
-  "esversion": 6
+  "esversion": 6,
+  "undef": true,
+  "unused": true,
+  "mocha": true,
+  "devel": true,
+  "globals": {
+    "Meteor": true,
+    "Session": true,
+    "Template": true
+  }
 }

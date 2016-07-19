@@ -15,38 +15,37 @@ describe('api/ai/sue.js', function() {
     });
   });
   describe('function makeMove', function() {
+    let board = {};
+    let state = {};
+    beforeEach(function() {
+      board = {
+        squares: Board.makeEmptyBoard(),
+        sunk: [],
+      };
+      state = {};
+    });
     it('returns 0,0 for first move', function() {
-      const board = Board.makeEmptyBoard();
-      const state = {};
       const move = AI.makeMove(board, state);
       assert.deepEqual(move, {row: 0, col: 0});
     });
     it('returns 0,9 for tenth move', function() {
-      const board = Board.makeEmptyBoard();
-      Board.setRange(board, 0, 0, 1, 9, 'X');
-      const state = {};
+      Board.setRange(board.squares, 0, 0, 1, 9, 'state', 'X');
       const move = AI.makeMove(board, state);
       assert.deepEqual(move, {row: 0, col: 9});
     });
     it('returns 1,0 for eleventh move', function() {
-      const board = Board.makeEmptyBoard();
-      Board.setRange(board, 0, 0, 1, 10, 'X');
-      const state = {};
+      Board.setRange(board.squares, 0, 0, 1, 10, 'state', 'X');
       const move = AI.makeMove(board, state);
       assert.deepEqual(move, {row: 1, col: 0});
     });
     it('returns 9,9 for hundredth move', function() {
-      const board = Board.makeEmptyBoard();
-      Board.setRange(board, 0, 0, 10, 10, 'X');
-      Board.setRange(board, 9, 9, 1, 1, 'E');
-      const state = {};
+      Board.setRange(board.squares, 0, 0, 10, 10, 'state', 'X');
+      Board.setRange(board.squares, 9, 9, 1, 1, 'state', 'E');
       const move = AI.makeMove(board, state);
       assert.deepEqual(move, {row: 9, col: 9});
     });
     it('throws error when board full', function() {
-      const board = Board.makeEmptyBoard();
-      Board.setRange(board, 0, 0, 10, 10, 'X');
-      const state = {};
+      Board.setRange(board.squares, 0, 0, 10, 10, 'state', 'X');
       const makeMove = function() {
         AI.makeMove(board, state);
       };

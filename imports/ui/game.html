@@ -1,93 +1,120 @@
 <template name="game">
-  
-  <h2 align="center">Game</h2>
-
   {{#if invalid}}
-    <p>Warning: Invalid game ID in URL.</p>
+    {{> http404}}
   {{else}}
 
+  <h2 class="text-center">Game</h2>
+
     {{#with game}}
-      {{> game_meta_data}}
-   
+      {{#if showBothBoards game}}
+      {{> game_meta_data game=game}}
+      <br />
+      <br />
+      {{> game_boards game=game ownBoard=ownBoard attackBoard=attackBoard}}
+      {{/if}}
+
       <br />
       <br />
 
-      {{> game_boards ownBoard=ownBoard attackBoard=attackBoard}}
-
-      <br />
-      <br />
-
-      {{> game_actions}}
+      {{> game_actions game=game}}
+      {{> game_meta_foot game=game}}
     {{/with}}
   {{/if}}
 </template>
 
 <template name="game_meta_data">
-  <table align="center">
-    <tr>
-      <td>
-        <div class="c1"><strong>Player 1</strong></div>
-      </td>
-      <td>
-        <div class="c2"></div>
-      </td>
-      <td>
-        <div class="c3"><strong>Player 2</strong></div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="c1">{{creator.user}}</div>
-      </td>
-      <td>
-        <div class="c2"><strong>Turn</strong></div>
-      </td>
-      <td>
-        <div class="c3">{{computer_id}}</div>
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><div class="c2">{{turn_number}}</div></td>
-      <td></td>
-    </tr>
-  </table>
+  <div class="row text-center game-meta-data">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-4">
+      <h3>Player 1</h3>
+      <p>{{ownName game}}</p>
+    </div>
+    <div class="col-sm-2">
+      <h3>Turn</h3>
+      <p>{{game.turn_number}}</p>
+    </div>
+    <div class="col-sm-4">
+      <h3>Player 2</h3>
+      <p>{{opponentName game}}</p>
+    </div>
+    <div class="col-sm-1"></div>
+  </div>
+  {{#if game.current_player}}
+  <div class="row text-center game-meta-data">
+    <div class="col-sm-12">
+      <p>Currently {{turnName game}}'s turn</p>
+    </div>
+  </div>
+  {{/if}}
 </template>
 
 <template name="game_boards">
-  <table align="center">
-    <tr>
-      <td width="600px" align="center">
-        <strong>Your Board</strong>
-      </td>
-      <td width="600px" align="center">
-        <strong>Their Board</strong>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        {{> board board=ownBoard}}
-      </td>
-      <td align="center">
-        {{> board board=attackBoard}}
-      </td>
-    </tr>
-  </table>
+  <div class="row text-center">
+    <div class="col-sm-6">
+      <strong>Your Board</strong>
+      {{> board board=ownBoard.squares game=game own=true}}
+      {{> sunk_ships sunk=ownBoard.sunk}}
+    </div>
+    <div class="col-sm-6">
+      <strong>Their Board</strong>
+      {{> board board=attackBoard.squares game=game own=false}}
+      {{> sunk_ships sunk=attackBoard.sunk}}
+    </div>
+  </div>
+</template>
+
+<template name="sunk_ships">
+  Ships sunk:
+  <ul class="sunkships">
+  {{#if sunk}}
+    {{#each sunk}}
+      <li>{{this}}</li>
+    {{/each}}
+  {{else}}
+    <li>None yet!</li>
+  {{/if}}
+  </ul>
 </template>
 
 <template name="game_actions">
-  <form>
-    <table align="center">
-      <tr>
-        <td align="center">
-          <input type="text" name="selection" id="selection" disabled="true" size="5" />
-        </td>
-      </tr>
-      <tr>
-        <td align="center">
-          <input type="submit" value="Fire!" />
-        </td>
-      </tr>
-    </table>
-  </form>
+  {{#if canFire game}}
+  <div class="row text-center">
+    <div class="col-sm-12">
+      <p>
+        <input type="text" name="selection" id="selection" disabled="true" size="5"
+          value="{{move}}" />
+        <button class="btn btn-default fireShot {{fireDisabled}}">Fire!</button>
+      </p>
+    </div>
+  </div>
+  {{/if}}
+  {{#if waiting game}}
+  <div class="row text-center">
+    <div class="col-sm-12">
+      <p>{{game.creator.name}} is waiting for an opponent.</p>
+      {{#if canJoin game}}
+      <p><button class="joinGame">Join Game!</button></p>
+      {{/if}}
+    </div>
+  </div>
+  {{/if}}
+</template>
+
+<template name="game_meta_foot">
+  <div class="row text-center">
+    <div class="col-sm-12">
+      {{#if game.time_finished}}
+      <p>Game over! The winner is: {{winner}}!</p>
+      {{/if}}
+      <div class="small">
+        <p>Game created: {{dateFormat game.created_at}}</p>
+        {{#if game.time_started}}
+        <p>Game started: {{dateFormat game.time_started}}</p>
+        {{/if}}
+        {{#if game.time_finished}}
+        <p>Game ended: {{dateFormat game.time_finished}}</p>
+        {{/if}}
+      </div>
+    </div>
+  </div>
 </template>

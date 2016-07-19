@@ -1,54 +1,49 @@
 /** Configuration for JSHint to recognize automatic globals: */
 
-import { $ } from 'meteor/jquery';
+import * as Game from '/imports/api/game.js';
+import * as Square from '/imports/api/square.js';
 
 import './board.html';
 import './board.less';
 
-Template.board_cell.helpers({
-  className() {
-    switch (this.ship.val) {
-      case 'H': return 'hit';
-      case 'M': return 'miss';
-      case 'S_Top': 
-      case 'S_Bottom':
-      case 'S_Right':
-      case 'S_Left':
-      case 'S_Vertical':
-      case 'S_Horizontal':
-        return 'ship';
-      case 'X': return 'sunk';
-      case 'E': return 'empty';
-      default: return '';
-    }
+function isSelected(row, col) {
+  let move = Session.get('move');
+  if(!move) return false;
+  return move.row === row && move.col === col;
+}
+
+Template.board_row.helpers({
+  rowName(row) {
+    return 'ABCDEFGHIJ'[row];
   },
-  symbol() {
-    switch (this.ship.val) {
-      case 'H':            return "../graphics/Hit.svg";  
-      case 'E':            return "../graphics/Water.svg";  
-      case 'M':            return "../graphics/Miss.svg";  
-      case 'S_Top':        return "../graphics/ShipTop.svg";  
-      case 'S_Bottom':     return "../graphics/ShipBottom.svg";  
-      case 'S_Right':      return "../graphics/ShipRight.svg";  
-      case 'S_Left':       return "../graphics/ShipLeft.svg";  
-      case 'S_Vertical':   return "../graphics/ShipVertical.svg";  
-      case 'S_Horizontal': return "../graphics/ShipHorizontal.svg";  
-      case 'X':            return "../graphics/Sunk.svg";  
-      default:             return "../graphics/Water.svg";  
+});
+
+Template.board_cell.helpers({
+  classes(game, row, col, square, own) {
+    const user = Meteor.user();
+    let list = "cell-" + square.state;
+    if(square.state === "S") {
+      list += " cell-S-" + square.ship;
     }
+    if(Game.userCanFire(game, user) && !own) {
+      if(square.state === "E") {
+        list += " clickable";
+      }
+      if(isSelected(row, col)) {
+        list += " selected";
+      }
+    }
+    return list;
   },
   cell() {
-    const col = 'ABCDEFGHIJ'[this.col];
-    return col + this.row;
-  },
-  selected() {
-    return false;
+    return Square.squareObjToName(this);
   },
 });
 
 Template.board_cell.events({
-  "click .cell"(event) {
+  "click .clickable.cell"(event) {
     const target = event.currentTarget;
-    $('#selection').val(target.dataset.cell);
+    const move = Square.squareNameToObj(target.dataset.cell);
+    Session.set('move', move);
   }
 });

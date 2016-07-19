@@ -28,3 +28,9 @@ kadira:flow-router
 kadira:blaze-layout
 less
 twbs:bootstrap
+accounts-ui
+accounts-password
+useraccounts:bootstrap
+useraccounts:flow-routing
+momentjs:moment
+session

@@ -1,22 +1,27 @@
 @cell-size: 32px;
 
-table {
-  .gamemeta {
-    align: center;
+.game-meta-data {
+  h3 {
+    font-size: 100%;
+    font-weight: bold;
+    padding-bottom: 0;
+    margin-bottom: 0;
   }
 }
 
-.c1 {
-  width: 300px;
-  text-align: left;
-}
+ul.sunkships {
+  list-style-type: none;
+  display: inline;
+  padding: 0;
 
-.c2 {
-  width: 100px;
-  text-align: center;
-}
+  li {
+    display: inline;
+  }
 
-.c3 {
-  width: 300px;
-  text-align: right;
+  li:after {
+    content: ", ";
+  }
+  li:last-child:after {
+    content: "";
+  }
 }

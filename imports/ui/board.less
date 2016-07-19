@@ -1,54 +1,76 @@
 @cell-size: 32px;
 
-table {
-  .board {
-    font-family: monospace;
-    cursor: default;
-    border-spacing: 0px;
-    border-collapse: collapse;
+table.board {
+  font-family: monospace;
+  cursor: default;
+  border-spacing: 0px;
+  border-collapse: collapse;
 
-    th {
-      .cellformat;
-      font-weight: bold;
-      font-size: 10;
+  margin-left: auto;
+  margin-right: auto;
+
+  th, td {
+    width: @cell-size;
+    height: @cell-size;
+    text-align: center;
+    padding: 2;
+  }
+
+  th {
+    font-weight: bold;
+    font-size: 11pt;
+  }
+
+  td.cell {
+    border: 1px solid black;
+    
+    &.cell-E {
+      background: url("/graphics/Water.svg");
+      background-size: @cell-size @cell-size;
     }
-
-    td {
-      .cellformat;
-      font-weight: normal;
-
-      img {
-        width: @cell-size;
-        height: @cell-size;
-        display: block;
+    &.cell-M {
+      background: url("/graphics/Miss.svg");
+      background-size: @cell-size @cell-size;
+    }
+    &.cell-H {
+      background: url("/graphics/Hit.svg");
+      background-size: @cell-size @cell-size;
+    }
+    &.cell-X {
+      background: url("/graphics/Sunk.svg");
+      background-size: @cell-size @cell-size;
+    }
+    &.cell-S {
+      &.cell-S-Top {
+        background: url("/graphics/ShipTop.svg");
+        background-size: @cell-size @cell-size;
+      }
+      &.cell-S-Bottom {
+        background: url("/graphics/ShipBottom.svg");
+        background-size: @cell-size @cell-size;
+      }
+      &.cell-S-Left {
+        background: url("/graphics/ShipLeft.svg");
+        background-size: @cell-size @cell-size;
+      }
+      &.cell-S-Right {
+        background: url("/graphics/ShipRight.svg");
+        background-size: @cell-size @cell-size;
+      }
+      &.cell-S-Vertical {
+        background: url("/graphics/ShipVertical.svg");
+        background-size: @cell-size @cell-size;
+      }
+      &.cell-S-Horizontal {
+        background: url("/graphics/ShipHorizontal.svg");
+        background-size: @cell-size @cell-size;
       }
     }
-    
-    .miss {
-      color: blue;
-    }
 
-    .hit, .sunk {
-      color: red;
-    }
-
-    .cell {
-      border: 1px solid black;
-      position: relative;
-    }
-
-    .cell:hover {
+    &.clickable:hover, &.selected {
+      background-image: none;
       background-color: orange;
       border: 1px solid orange;
-      position: relative;
-      z-index: 100;
     }
   }
-}
-
-.cellformat {
-  width: @cell-size;
-  height: @cell-size;
-  text-align: center;
-  padding: 2;
 }

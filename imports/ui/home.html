@@ -1,14 +1,120 @@
 <template name="home">
-  <p>This is the home page.</p>
-  <p>Here are the games that are currently defined:</p>
-  <ul>
-    {{#each games}}
-      {{> home_game}}
-    {{/each}}
-  </ul>
-  <p><button id="createGame" type="submit">Create Game</button></p>
+  <div style="align:center;">
+    <span class="home-page-title">Home</span>
+  </div>
+
+  <div>
+    <ul class="list-group">
+      {{#each games}}
+        {{> home_game}}
+      {{/each}}
+    </ul>
+  </div>
+
+  <div>
+    {{> game_create_form}}
+    {{#if currentUser}}
+      <button id="createGame" type="submit" class="btn btn-primary btn-md">Create Game</button>
+      <button id="createWait" type="submit" class="btn btn-md">List in Waiting Room</button>
+    {{else}}
+      Log in to create a game.
+    {{/if}}
+  </div>
 </template>
 
 <template name="home_game">
-  <li><a href="/game/{{_id}}">{{_id}}</a> (<a href="#" class="deleteGame">delete</a>)</li>
+  <a href="/game/{{_id}}" class="list-group-item">
+    <div class="list-item">
+      <table style="width:100%;table-layout:fixed;">
+        <tbody>
+        <tr>
+          <td>
+            <span class="game-title">{{_id}}</span>
+            {{#with gameState _id}}
+              <span class="label {{label_style}}">{{state}}</span>
+            {{/with}}
+            <span class="badge">{{turn_number}}</span>
+          </td>
+          <td rowspan="2" width="60px" align="center">
+          
+          </td>
+          <td rowspan="2" width="20px" align="center">
+            <a href="#" class="deleteGame">
+              <span class="glyphicon glyphicon-remove"></span>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="game-players">{{creator.name}} vs. {{challenger.name}}</span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </a>
+</template>
+
+<template name="game_create_form">
+  <form id="newGameForm">
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <div class="form-group">
+              <label for="gameName">Name</label>
+              <input type="text" class="form-control" id="gameName">
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="width:20%">
+            <div class="radio">
+              <label><input type="radio" name="opp-radio" value="sue">Sequential Sue</label>
+            </div>
+          </td>
+          <td style="width:20%">
+            <div class="radio">
+              <label><input type="radio" name="opp-radio" value="ralph">Random Ralph</label>
+            </div>
+          </td>
+          <td style="width:20%">
+            <div class="radio">
+              <label><input type="radio" name="opp-radio" value="jack">Geometric Jack</label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="radio">
+              <label><input type="radio" name="opp-radio" value="paul">Parity Paul</label>
+            </div>
+          </td>
+          <td>
+            <div class="radio">
+              <label><input type="radio" name="opp-radio" value="pat">Partitioning Pat</label>
+            </div>
+          </td>
+          <td>
+            <div class="radio">
+              <label><input type="radio" name="opp-radio" value="felicity">Focused Felicity</label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="radio">
+              <label><input type="radio" name="opp-radio" value="preston" disabled>Probablistic Preston</label>
+            </div>
+          </td>
+          <td>
+            <div class="radio">
+              <label><input type="radio" name="opp-radio" value="chad">Cheating Chad</label>
+            </div>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </form>
 </template>
