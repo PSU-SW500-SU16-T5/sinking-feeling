@@ -1,120 +1,22 @@
 <template name="home">
-  <div style="align:center;">
-    <span class="home-page-title">Home</span>
-  </div>
-
-  <div>
-    <ul class="list-group">
-      {{#each games}}
-        {{> home_game}}
-      {{/each}}
-    </ul>
-  </div>
-
-  <div>
-    {{> game_create_form}}
+  <div class="container home">
+    <h1>Sinking Feeling</h1>
+    {{#with fake}}
+    {{> board board=squares game=game own=false}}
+    {{/with}}
+    <p>
+      Sinking Feeling is a clone of the game Battleship, which was originally
+      popularized by Milton Bradley. On Sinking Feeling, you have the
+      opportunity to play against computer AI opponents as well as against
+      other players. New players should review the <a href="/rules">rules</a>
+      before <a href="/create">creating their first game</a>.
+    </p>
     {{#if currentUser}}
-      <button id="createGame" type="submit" class="btn btn-primary btn-md">Create Game</button>
-      <button id="createWait" type="submit" class="btn btn-md">List in Waiting Room</button>
     {{else}}
-      Log in to create a game.
+    <p>
+      If you're new to the site, be sure to <a href="/sign-up">sign up</a>: you
+      have to be logged in to play!
+    </p>
     {{/if}}
   </div>
-</template>
-
-<template name="home_game">
-  <a href="/game/{{_id}}" class="list-group-item">
-    <div class="list-item">
-      <table style="width:100%;table-layout:fixed;">
-        <tbody>
-        <tr>
-          <td>
-            <span class="game-title">{{_id}}</span>
-            {{#with gameState _id}}
-              <span class="label {{label_style}}">{{state}}</span>
-            {{/with}}
-            <span class="badge">{{turn_number}}</span>
-          </td>
-          <td rowspan="2" width="60px" align="center">
-          
-          </td>
-          <td rowspan="2" width="20px" align="center">
-            <a href="#" class="deleteGame">
-              <span class="glyphicon glyphicon-remove"></span>
-            </a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <span class="game-players">{{creator.name}} vs. {{challenger.name}}</span>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </a>
-</template>
-
-<template name="game_create_form">
-  <form id="newGameForm">
-    <table>
-      <tbody>
-        <tr>
-          <td>
-            <div class="form-group">
-              <label for="gameName">Name</label>
-              <input type="text" class="form-control" id="gameName">
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td style="width:20%">
-            <div class="radio">
-              <label><input type="radio" name="opp-radio" value="sue">Sequential Sue</label>
-            </div>
-          </td>
-          <td style="width:20%">
-            <div class="radio">
-              <label><input type="radio" name="opp-radio" value="ralph">Random Ralph</label>
-            </div>
-          </td>
-          <td style="width:20%">
-            <div class="radio">
-              <label><input type="radio" name="opp-radio" value="jack">Geometric Jack</label>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="radio">
-              <label><input type="radio" name="opp-radio" value="paul">Parity Paul</label>
-            </div>
-          </td>
-          <td>
-            <div class="radio">
-              <label><input type="radio" name="opp-radio" value="pat">Partitioning Pat</label>
-            </div>
-          </td>
-          <td>
-            <div class="radio">
-              <label><input type="radio" name="opp-radio" value="felicity">Focused Felicity</label>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="radio">
-              <label><input type="radio" name="opp-radio" value="preston" disabled>Probablistic Preston</label>
-            </div>
-          </td>
-          <td>
-            <div class="radio">
-              <label><input type="radio" name="opp-radio" value="chad">Cheating Chad</label>
-            </div>
-          </td>
-        </tr>
-
-      </tbody>
-    </table>
-  </form>
 </template>

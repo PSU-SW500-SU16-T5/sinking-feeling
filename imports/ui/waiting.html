@@ -1,0 +1,11 @@
+<template name="waiting_room">
+  <h1>Waiting Room</h1>
+  <div class="list-group">
+  {{#each game in games}}
+    {{> listing id=game._id title=(title game) players=(players game)
+      state=false turn_number=false canDelete=false}}
+  {{else}}
+  <p>There are currently no games available to join.</p>
+  {{/each}}
+  </div>
+</template>

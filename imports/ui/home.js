@@ -1,76 +1,36 @@
-/* globals FlowRouter */
-import { Template } from 'meteor/templating';
-import { $ } from 'meteor/jquery';
-import { Games } from '../api/games.js';
-import * as Game from '../api/game.js';
+
+import * as Board from '/imports/api/board.js';
 
 import './home.html';
 import './home.less';
+import './board.js';
 
 Template.home.helpers({
-  games() {
-    return Games.find({});
+  fake() {
+    const squares = Board.makeEmptyBoard();
+    const game = {
+      state: 'ended',
+    };
+
+    squares[0][0].state = 'M';
+    squares[1][1].state = 'M';
+    squares[3][2].state = 'M';
+
+    squares[2][2] = {state: 'X', ship: 'Left'};
+    squares[2][3] = {state: 'X', ship: 'Horizontal'};
+    squares[2][4] = {state: 'X', ship: 'Right'};
+
+    squares[5][5].state = 'M';
+    squares[6][6].state = 'M';
+    squares[7][7].state = 'M';
+    squares[8][8].state = 'M';
+    squares[9][9].state = 'M';
+
+    squares[6][0].state = 'M';
+    squares[7][1].state = 'H';
+    squares[7][2].state = 'M';
+    squares[8][1].state = 'H';
+
+    return { squares, game };
   },
-});
-
-Template.home_game.helpers({
-  gameState(gameId) {
-    const state = Games.findOne({_id: gameId}, {state: 1});
-
-    switch(state.state)
-    {
-      case 'created':
-        state.label_style = "label-primary";
-        break;
-      case 'waiting':
-      case 'pending':
-        state.label_style = "label-warning";
-        break;
-      case 'declined':
-        state.label_style = "label-danger";
-        break;
-      case 'setup':
-        state.label_style = "label-info";
-        break;
-      case 'active':
-        state.label_style = "label-success";
-        break;
-      case 'ended':
-        state.label_style = "label-default";
-        break;
-      default:
-        state.label_style = "label-default";
-        break;
-    }
-    
-    return state;
-  },
-});
-
-Template.home.events({
-  'click #createGame'() {
-    const user = Meteor.user();
-    if(!user) throw new Meteor.error('not-logged-in');
-
-    const oppSelection = $("input[name='opp-radio']:checked").val();
-
-    const game = Game.create(user);
-    Game.initVsAi(game, oppSelection);
-    FlowRouter.go('game', { id: game._id });
-  },
-  'click #createWait'() {
-    const user = Meteor.user();
-    if(!user) throw new Meteor.error('not-logged-in');
-
-    const game = Game.create(user);
-    Game.initToWaiting(game);
-    FlowRouter.go('game', { id: game._id });
-  },
-});
-
-Template.home_game.events({
-  'click .deleteGame'(event) {
-    event.preventDefault();
-    Games.remove(this._id);
-  }
 });

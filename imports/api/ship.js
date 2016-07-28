@@ -37,7 +37,7 @@ export function overlap(ship, row, col, vertical, ships) {
   return false;
 }
 
-export function checkOverlap(ship_type, row, col, vertical, positions) {
+export function checkPlacement(ship_type, row, col, vertical, positions) {
   if(positions[ship_type]) {
     // This is moving a ship, we don't want to include the pre-move ship in the
     // overlap test. This makes a copy that we can remove it from.
@@ -45,12 +45,25 @@ export function checkOverlap(ship_type, row, col, vertical, positions) {
     delete positions[ship_type];
   }
   if(overlap(ship_type, row, col, vertical, positions)) {
-    throw 'Ships Overlapping';
+    return 'Ships overlapping';
   }
+  const len = lengths[ship_type];
+  if(
+    row < 0 || col < 0 ||
+    row > 9 || col > 9 ||
+    (vertical && row + len - 1 > 9) ||
+    (!vertical && col + len - 1 > 9)
+  ) {
+    return 'Ship off of board';
+  }
+  return false;
 }
 
 export function place(ship_type, row, col, vertical, positions) {
-  checkOverlap(ship_type, row, col, vertical, positions);
+  const check = checkPlacement(ship_type, row, col, vertical, positions);
+  if(check) {
+    throw check;
+  }
 
   if(!positions[ship_type]) {
     positions[ship_type] = {};

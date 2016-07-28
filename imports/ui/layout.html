@@ -14,6 +14,11 @@
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
           <li><a href="/">Home</a></li>
+          {{#if currentUser}}
+          <li><a href="/dashboard">My Dashboard</a></li>
+          <li><a href="/create">Create Game</a></li>
+          <li><a href="/waiting">Waiting Room</a></li>
+          {{/if}}
           <li><a href="/rules">Rules</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">

@@ -1,0 +1,83 @@
+<template name="dashboard">
+  {{#if currentUser}}
+    <h1>{{currentUser.username}}'s Games</h1>
+
+    {{#if allGames.count}}
+    {{else}}
+      <p>
+        You don't have any games yet.
+      </p>
+    {{/if}}
+
+    {{#if invited.count}}
+      {{> dash_invited games=invited}}
+    {{/if}}
+    {{#if active.count}}
+      {{> dash_active games=active}}
+    {{/if}}
+    {{#if waiting.count}}
+      {{> dash_waiting games=waiting}}
+    {{/if}}
+    {{#if done.count}}
+      {{> dash_done games=done}}
+    {{/if}}
+  {{else}}
+    <p>This page only applies to logged-in users.</p>
+  {{/if}}
+</template>
+
+<template name="dash_invited">
+  <h2>Invitations</h2>
+  <p>
+    You've been invited to the games below. Visit each game's page to accept or
+    reject the invitation.
+  </p>
+  <ul class="list-group">
+    {{#each game in games}}
+      {{> listing id=game._id title=(title game) players=(players game)
+        state=game.state turn_number=false canDelete=true}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="dash_active">
+  <h2>Active</h2>
+  <p>
+    The games below are waiting on you to take action: either to take your turn
+    or to complete game setup.
+  </p>
+  <ul class="list-group">
+    {{#each game in games}}
+      {{> listing id=game._id title=(title game) players=(players game)
+        state=game.state turn_number=game.turn_number canDelete=true}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="dash_waiting">
+  <h2>Waiting</h2>
+  <p>
+    The games below are waiting on someone else to take action. There's not
+    much you can do except resign and/or remove the game.
+  </p>
+  <ul class="list-group">
+    {{#each game in games}}
+      {{> listing id=game._id title=(title game) players=(players game)
+        state=game.state turn_number=game.turn_number canDelete=true}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="dash_done">
+  <h2>Finished</h2>
+  <p>
+    The games below are finished, either because the game is over or because an
+    invited player declined.
+  </p>
+  <ul class="list-group">
+    {{#each game in games}}
+      {{> listing id=game._id title=(title game) players=(players game)
+        state=game.state turn_number=game.turn_number canDelete=true}}
+    {{/each}}
+  </ul>
+</template>

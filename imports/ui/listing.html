@@ -1,0 +1,33 @@
+<template name="listing">
+  <a href="{{gameUrl id}}" class="list-group-item game-listing">
+    <table style="width:100%;table-layout:fixed;">
+      <tbody>
+        <tr>
+          <td>
+            <span class="game-title">{{title}}</span>
+            {{#if state}}
+              <span class="label {{stateStyle state}}">{{state}}</span>
+            {{/if}}
+            {{#if turn_number}}
+              <span class="badge">{{turn turn_number}}</span>
+            {{/if}}
+          </td>
+          <td rowspan="2" width="60px" align="center">
+          </td>
+          <td rowspan="2" width="20px" align="center">
+            {{#if canDelete}}
+              <a href="{{removeUrl id}}" class="deleteGame">
+                <span class="glyphicon glyphicon-remove"></span>
+              </a>
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="game-players">{{players}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </a>
+</template>

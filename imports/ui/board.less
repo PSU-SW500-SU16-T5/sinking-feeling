@@ -10,15 +10,19 @@ table.board {
   margin-right: auto;
 
   th, td {
-    width: @cell-size;
-    height: @cell-size;
     text-align: center;
     padding: 2;
+  }
+
+  td {
+    width: @cell-size;
+    height: @cell-size;
   }
 
   th {
     font-weight: bold;
     font-size: 11pt;
+    padding: 0 4px;
   }
 
   td.cell {

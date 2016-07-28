@@ -3,77 +3,175 @@
     {{> http404}}
   {{else}}
 
-  <h2 class="text-center">Game</h2>
+    <h2 class="text-center">{{title game}}</h2>
+    
+    {{#if alert}}
+      <div class="alert alert-danger" role="alert">
+        {{alert}}
+      </div>
+    {{/if}}
 
-    {{#with game}}
-      {{#if showBothBoards game}}
-      {{> game_meta_data game=game}}
-      <br />
-      <br />
-      {{> game_boards game=game ownBoard=ownBoard attackBoard=attackBoard}}
+    {{> game_confirmations game=game}}
+
+    {{#if showBothBoards game}}
+      <div class="game-lead">
+        <p class="players">{{players game}}</p>
+        <p class="turn">{{turn game}}</p>
+      </div>
+
+      {{> game_both_boards game=game ownBoard=ownBoard attackBoard=attackBoard}}
+    {{else}}
+      {{#if showPlayerBoard game}}
+        <div class="game-lead">
+          <p class="players">{{players game}}</p>
+          <p class="turn">{{turn game}}</p>
+        </div>
+
+        {{> game_own_board game=game board=setupBoard}}
+      {{else}}
+        {{> game_actions game=game}}
       {{/if}}
-
-      <br />
-      <br />
-
-      {{> game_actions game=game}}
-      {{> game_meta_foot game=game}}
-    {{/with}}
+    {{/if}}
   {{/if}}
 </template>
 
-<template name="game_meta_data">
-  <div class="row text-center game-meta-data">
-    <div class="col-sm-1"></div>
-    <div class="col-sm-4">
-      <h3>Player 1</h3>
-      <p>{{ownName game}}</p>
+<template name="game_confirmations">
+  {{#if actionRemove}}
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        Do you really want to remove this game?
+      </div>
+      <div class="panel-body">
+        <p>
+          {{#if actionRemoveWillDelete game}}
+            Removing this game will result in it being immediately deleted.
+            This action is irreversible.
+          {{else}}
+            Removing this game will prevent it from showing up on your
+            dashboard.
+            This action is irreversible.
+            The game will not be deleted until your opponent also removes the
+            game from their dashboard.
+            {{#if actionRemoveWillResign game}}
+              You will also automatically forfeit the game to your opponent.
+            {{/if}}
+          {{/if}}
+        </p>
+        <p>
+          <button class="removeGame btn btn-danger">Remove</button>
+          <a class="btn btn-default" href="{{urlSelf}}">Cancel</a>
+        </p>
+      </div>
     </div>
-    <div class="col-sm-2">
-      <h3>Turn</h3>
-      <p>{{game.turn_number}}</p>
+    <p>Do you really want to remove this game?</p>
+  {{/if}}
+
+  {{#if actionResign}}
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        Do you really want to resign?
+      </div>
+      <div class="panel-body">
+        <p>
+          If you resign, you will automatically lose the game. Are you sure
+          this is what you really want?
+        </p>
+        <p>
+          <button class="resignGame btn btn-danger">Resign</button>
+          <a class="btn btn-default" href="{{urlSelf}}">Cancel</a>
+        </p>
+      </div>
     </div>
-    <div class="col-sm-4">
-      <h3>Player 2</h3>
-      <p>{{opponentName game}}</p>
-    </div>
-    <div class="col-sm-1"></div>
-  </div>
-  {{#if game.current_player}}
-  <div class="row text-center game-meta-data">
-    <div class="col-sm-12">
-      <p>Currently {{turnName game}}'s turn</p>
-    </div>
-  </div>
   {{/if}}
 </template>
 
-<template name="game_boards">
+<template name="game_both_boards">
   <div class="row text-center">
-    <div class="col-sm-6">
-      <strong>Your Board</strong>
-      {{> board board=ownBoard.squares game=game own=true}}
-      {{> sunk_ships sunk=ownBoard.sunk}}
+    <div class="col-lg-9 col-md-6">
+      <div class="row">
+        <div class="col-lg-6">
+          {{> game_board game=game board=attackBoard own=false player=(otherPlayer game)}}
+          {{> game_actions game=game}}
+        </div>
+        <div class="col-lg-6">
+          {{> game_board game=game board=ownBoard own=true player=(ownPlayer game)}}
+        </div>
+      </div>
     </div>
-    <div class="col-sm-6">
-      <strong>Their Board</strong>
-      {{> board board=attackBoard.squares game=game own=false}}
-      {{> sunk_ships sunk=attackBoard.sunk}}
+    <div class="col-lg-3 col-md-6">
+      {{> game_log game=game}}
+    </div>
+  </div>
+</template>
+
+<template name="game_own_board">
+  <div class="row text-center">
+    <div class="col-md-6">
+      {{> game_board game=game board=board own=true player=(ownPlayer game)}}
+      {{> game_actions game=game}}
+    </div>
+        <div class="col-md-6">
+      {{> game_log game=game}}
+    </div>
+  </div>
+</template>
+
+<template name="game_board">
+  <div class="game-board panel panel-primary">
+    <div class="panel-heading">
+      {{playerName game player}}'s board
+    </div>
+    <div class="panel-body">
+      {{> board board=board.squares game=game own=own}}
+    </div>
+    <div class="panel-footer">
+      {{#if isSetup game}}
+        {{#if movingShip}}
+          Select a destination for your {{movingShip}}.
+        {{else}}
+          Select a ship to move.
+        {{/if}}
+      {{else}}
+        {{> sunk_ships sunk=board.sunk}}
+      {{/if}}
     </div>
   </div>
 </template>
 
 <template name="sunk_ships">
-  Ships sunk:
-  <ul class="sunkships">
-  {{#if sunk}}
-    {{#each sunk}}
-      <li>{{this}}</li>
-    {{/each}}
-  {{else}}
-    <li>None yet!</li>
-  {{/if}}
-  </ul>
+  <div class="ship-status">
+    {{#let unsunk=(getUnsunk sunk)}}
+      {{#if sunk}}
+        <ul class="sunk">
+          {{#each item in (getLengths sunk)}}
+            <li><span class="label label-primary" title="{{item.type}}">{{item.len}}</span></li>
+          {{/each}}
+        </ul>
+      {{/if}}
+      {{#if unsunk}}
+        <ul class="unsunk">
+          {{#each item in (getLengths unsunk)}}
+            <li><span class="label label-info" title="{{item.type}}">{{item.len}}</span></li>
+          {{/each}}
+        </ul>
+      {{/if}}
+    {{/let}}
+  </div>
+</template>
+
+<template name="game_log">
+  <div class="game-log panel panel-primary">
+    <div class="panel-heading">Game Log</div>
+    <div class="panel-body">
+      <ol>
+        {{#each entry in (log game)}}
+          <li title="{{timestamp entry}}">
+            {{format ../game entry}}
+          </li>
+        {{/each}}
+      </ol>
+    </div>
+  </div>
 </template>
 
 <template name="game_actions">
@@ -88,6 +186,15 @@
     </div>
   </div>
   {{/if}}
+  {{#if canResign game}}
+  <div class="row text-center">
+    <div class="col-sm-12">
+      <p>
+        <a class="btn btn-danger" href="{{urlResign game}}">Resign Game</a>
+      </p>
+    </div>
+  </div>
+  {{/if}}
   {{#if waiting game}}
   <div class="row text-center">
     <div class="col-sm-12">
@@ -98,23 +205,55 @@
     </div>
   </div>
   {{/if}}
-</template>
-
-<template name="game_meta_foot">
+  {{#if pending game}}
   <div class="row text-center">
     <div class="col-sm-12">
-      {{#if game.time_finished}}
-      <p>Game over! The winner is: {{winner}}!</p>
+      {{#if amInviter game}}
+        <p>{{game.challenger.name}} hasn't responded to your invitation yet.</p>
       {{/if}}
-      <div class="small">
-        <p>Game created: {{dateFormat game.created_at}}</p>
-        {{#if game.time_started}}
-        <p>Game started: {{dateFormat game.time_started}}</p>
-        {{/if}}
-        {{#if game.time_finished}}
-        <p>Game ended: {{dateFormat game.time_finished}}</p>
-        {{/if}}
-      </div>
+      {{#if amInvitee game}}
+        <p>{{game.creator.name}} has invited you to join this game.</p>
+        <p>
+          <button class="acceptInvite">Accept Invitation</button>
+          <button class="declineInvite">Decline Invitation</button>
+        </p>
+      {{/if}}
+      {{#if notMyGame game}}
+        <p>{{game.creator.name}} has invited someone else to join this game.</p>
+      {{/if}}
     </div>
   </div>
+  {{/if}}
+  {{#if canSetup game}}
+    <div class="row text-center">
+      <div class="col-sm-12">
+        <p>
+          <button class="btn btn-default MoveShip {{moveDisabled}}">Move</button>
+          <button class="btn btn-default RotateShip {{moveDisabled}}">Rotate</button>
+          &nbsp;
+          <button class="btn btn-default ConfirmMove {{confirmDisabled}}">Confirm</button>
+          &nbsp;
+          <button class="btn btn-warning StartGame">Finished Setup</button>
+        </p>
+        <div class="text-left">
+          <p>
+            To move a ship:
+          </p>
+          <ol>
+            <li>Click on a ship.</li>
+            <li>Click Move (to move) or Rotate (to rotate and move).</li>
+            <li>
+              Click on the square where you want to move the ship. This square
+              will be the new top/left corner of the ship. Only valid squares
+              are clickable.
+            </li>
+            <li>Click Confirm to finalize placement.</li>
+          </ol>
+          <p>
+            When are you are finished setup, click Finished Setup.
+          </p>
+        </div>
+      </div>
+    </div>
+  {{/if}}
 </template>

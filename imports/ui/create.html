@@ -1,0 +1,109 @@
+<template name="create_game">
+  <h1>Create Game</h1>
+
+  <div class="form-group">
+    <label for="game-title">Game Title</label>
+    <input class="form-control" id="game-title" type="text">
+    <span class="help-block">
+      The game title is a user-defined name for the game and will be displayed
+      in game lists and on the game's page.
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label>Who should go first?</label>
+
+    <div class="radio">
+      <label>
+        <input name="first-player" type="radio"
+          id="first-player-creator" value="creator">
+        I should go first
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input name="first-player" type="radio"
+          id="first-player-challenger" value="challenger">
+        My opponent should go first
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input name="first-player" type="radio"
+          id="first-player-random" value="random" checked>
+        Randomly choose the first player
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>How do you want to select your opponent?</label>
+
+    <div class="radio">
+      <label>
+        <input name="opponent-type" type="radio"
+          id="opponent-type-ai" value="ai">
+        I want to select a computer AI
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input name="opponent-type" type="radio"
+          id="opponent-type-invite" value="invite">
+        I want to invite a player
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input name="opponent-type" type="radio"
+          id="opponent-type-waiting" value="waiting">
+        I want to list my game in the waiting room
+      </label>
+    </div>
+  </div>
+
+  {{#if showAi}}
+  {{> create_game_ai}}
+  {{/if}}
+  {{#if showPlayers}}
+  {{> create_game_invite}}
+  {{/if}}
+
+  {{#if currentUser}}
+    <button id="createGame" type="submit" class="btn btn-primary btn-md" {{submitDisabled}}>
+      Create Game
+    </button>
+  {{else}}
+    Log in to create a game.
+  {{/if}}
+</template>
+
+<template name="create_game_ai">
+  <div class="form-group">
+    <label for="select-ai">Computer AI Opponent</label>
+    <select class="form-control" id="select-ai">
+      {{#each player in players}}
+        <option value="{{player.name}}" {{selected player}}>
+          {{player.full_name}} ({{player.difficulty_name}})
+        </option>
+      {{/each}}
+    </select>
+    <span id="help-select-ai" class="help-block">
+      {{description}}
+    </span>
+  </div>
+</template>
+
+<template name="create_game_invite">
+  <div class="form-group">
+    <label>Opponent User Name</label>
+    <select class="form-control" id="select-player">
+      <option selected disabled hidden style="display: none;" value=""></option>
+      {{#each player in players}}
+        <option value="{{player._id}}">
+          {{player.username}}
+        </option>
+      {{/each}}
+    </select>
+  </div>
+</template>

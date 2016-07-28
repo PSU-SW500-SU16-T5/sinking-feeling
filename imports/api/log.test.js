@@ -226,15 +226,15 @@ describe('log', function() {
       assert.equal(log[log.length - 1].result, 'all ships sunk');
     });
     it('game ended possibly not won', function() {
-      var ended_at = new Date(2016, 01, 01, 01, 03, 01);
+      var time_finished = new Date(2016, 01, 01, 01, 03, 01);
       var game = firstShot(prepGame({}));
-      game.ended_at = ended_at;
+      game.time_finished = time_finished;
       game.state = 'ended';
 
       var log = Log.getLog(game);
 
       assert.equal(log[log.length - 1].event, 'ended');
-      assert.equal(log[log.length - 1].time, ended_at);
+      assert.equal(log[log.length - 1].time, time_finished);
     });
   });
   describe('player order', function() {

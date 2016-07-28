@@ -4,6 +4,15 @@
 
 import * as Ship from './ship.js';
 
+export function spaceShip(space, ships) {
+  for(let type in ships) {
+    if(spaceIsOnAShip(space, ships[type], Ship.lengths[type])) {
+      return type;
+    }
+  }
+  return false;
+}
+
 // only exported for testing, don't call this
 export function spaceIsOnShip(space, ships) {
   for(let type in ships) {

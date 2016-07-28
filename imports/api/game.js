@@ -1,9 +1,11 @@
+import {_} from 'meteor/underscore';
+
 import * as AI from './ai.js';
 import * as Board from './board.js';
 import * as Ship from './ship.js';
 import {Games} from './games.js';
 
-export function create(user, first_player='creator') {
+export function create(user, first_player=null, title=null) {
   var game = {
     created_at: new Date(),
     creator: {
@@ -11,14 +13,25 @@ export function create(user, first_player='creator') {
       name: user.username,
       ships: Ship.create(),
       ready: false,
+      shots: [],
     },
     challenger: {
       ships: Ship.create(),
       ready: false,
+      shots: [],
     },
     first_player: first_player,
     state: 'created',
   };
+
+  if(title) {
+    game.title = title;
+  }
+
+  const player_names = ['creator', 'challenger'];
+  if(!_.contains(player_names, game.first_player)) {
+    game.first_player = _.sample(player_names);
+  }
 
   Ship.randomize(game.creator.ships);
   Ship.randomize(game.challenger.ships);
@@ -34,17 +47,34 @@ export function initVsAi(game, ai) {
   game.state = 'setup';
   game.creator.ready_at = new Date();
 
-  // TODO: This changes setup to active and should go away when we implement
-  // ship placement in the UI.
-  game.creator.ready = true;
   checkState(game);
+  update(game);
+  return game;
+}
 
+export function initToPending(game, user) {
+  game.challenger.id = user._id;
+  game.challenger.name = user.username;
+  game.challenger.response = 'none';
+  game.state = 'pending';
+
+  checkState(game);
+  update(game);
+  return game;
+}
+
+export function respondToPending(game, join) {
+  game.challenger.response = join ? 'accept' : 'decline';
+
+  checkState(game);
   update(game);
   return game;
 }
 
 export function initToWaiting(game) {
   game.state = 'waiting';
+
+  checkState(game);
   update(game);
   return game;
 }
@@ -54,14 +84,7 @@ export function joinWaiting(game, user) {
   game.challenger.name = user.username;
   game.state = 'setup';
 
-  // TODO: This changes setup to active and should go away when we implement
-  // ship placement in the UI.
-  game.creator.ready = true;
-  game.creator.ready_at = new Date();
-  game.challenger.ready = true;
-  game.creator.ready_at = new Date();
   checkState(game);
-
   update(game);
   return game;
 }
@@ -75,18 +98,24 @@ export function checkStateCreated(game) {
 }
 
 export function checkStateWaiting(game) {
-  if(game && game.creator && 'id' in game.creator) {
-    // TODO: This skips setup and change to 'setup' when we implement ship
-    // placement in the UI.
-    game.state = 'active';
+  if(game && game.challenger && 'id' in game.challenger) {
+    game.state = 'setup';
   }
-
-  game = game;
 }
 
 export function checkStatePending(game) {
-  // Fool JShint into thinking we're using the parameter.
-  game = game;
+  if(game.challenger.response === 'accept') {
+    delete game.challenger.response;
+    game.state = 'setup';
+  }
+  if(game.challenger.response === 'decline') {
+    delete game.challenger.response;
+    game.state = 'declined';
+  }
+  if('remove' in game.challenger && game.challenger.remove) {
+    delete game.challenger.response;
+    game.state = 'declined';
+  }
 }
 
 export function checkStateDeclined(game) {
@@ -99,10 +128,7 @@ export function checkStateSetup(game) {
   if(!game.challenger.ready) return;
 
   delete game.creator.ready;
-  game.creator.shots = [];
-
   delete game.challenger.ready;
-  game.challenger.shots = [];
 
   game.state = 'active';
 
@@ -113,6 +139,18 @@ export function checkStateSetup(game) {
 
   game.turn_number = 0;
   game.time_started = new Date();
+
+  checkAiFirstShot(game);
+}
+
+export function checkAiFirstShot(game){
+  if(game.first_player == 'challenger'){
+    if (typeof game.challenger.ai != 'undefined'){
+      computerShot(game);
+      game.turn_number++;
+      game.current_player = 'creator';
+    }
+  }
 }
 
 export function checkStateActive(game) {
@@ -177,6 +215,66 @@ export function checkState(game) {
   } else {
     throw Meteor.Error('invalid-state', 'The game has an invalid state');
   }
+
+  // TODO: This changes setup to active and should go away when we implement
+  // ship placement in the UI.
+  /*
+  if(game.state === 'setup') {
+    game.creator.ready = true;
+    game.creator.ready_at = new Date();
+    game.challenger.ready = true;
+    game.creator.ready_at = new Date();
+    states.setup(game);
+  }
+  */
+}
+
+export function remove(game, player) {
+  if(opponentRemoved(game, player)) {
+    Games.remove(game._id);
+  } else {
+    game[player].remove = true;
+    if(game.state === 'active' || game.state === 'setup') {
+      resign(game, player);
+    }
+    update(game);
+  }
+}
+
+export function opponentRemoved(game, player) {
+  /* jshint -W086 */
+  const opponent = oppositePlayer(player);
+  switch(game.state) {
+    case 'created':
+    case 'waiting':
+      return true;
+    case 'pending':
+    case 'declined':
+      if(player === 'creator') {
+        return true;
+      } else {
+        return ('remove' in game[opponent] && game[opponent].remove);
+      }
+    default:
+      if('ai' in game[opponent]) {
+        return true;
+      }
+      return ('remove' in game[opponent] && game[opponent].remove);
+  }
+  /* jshint +W086 */
+}
+
+export function resign(game, player) {
+  const opponent = oppositePlayer(player);
+
+  game.resignation = player;
+  game.state = 'ended';
+  game.winner = opponent;
+  game.time_finished = new Date();
+
+  delete game.current_player;
+
+  update(game);
 }
 
 export function update(game) {
@@ -234,13 +332,16 @@ export function playerShot(game, player, row, col) {
 export function fire(game, row, col) {
   let player = game.current_player;
   playerShot(game, player, row, col);
+  game.turn_number += 1;
+
+  checkState(game);
+  if(game.state !== 'active') return;
 
   if ('ai' in game.challenger) {
     computerShot(game);
-    game.turn_number += 2;
+    game.turn_number += 1;
   } else {
     game.current_player = oppositePlayer(player);
-    game.turn_number += 1;
   }
 }
 
@@ -281,6 +382,13 @@ export function getUserPlayer(game, user) {
   return false;
 }
 
+export function getTitle(game) {
+  if('title' in game) {
+    return game.title;
+  }
+  return 'Unnamed Game ' + game._id.substring(0, 6);
+}
+
 export function userIsPlayer(game, user) {
   if(!user) return false;
   if(user._id === game.creator.id) return true;
@@ -294,6 +402,14 @@ export function userCanFire(game, user) {
   if(!userIsPlayer(game, user)) return false;
   const player = getUserPlayer(game, user);
   return game.current_player === player;
+}
+
+export function userCanSetup(game, user) {
+  if(!user) return false;
+  if(game.state !== 'setup') return false;
+  if(!userIsPlayer(game, user)) return false;
+  const player = getUserPlayer(game, user);
+  return !game[player].ready;
 }
 
 export function userCanJoin(game, user) {

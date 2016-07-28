@@ -133,7 +133,7 @@ describe('api/ships.js', function() {
 
       assert.throw(function() {
         Ship.place("battleship", 0, 0, true, positions);
-      }, "Ships Overlapping");
+      }, "Ships overlapping");
 
       assert.equal(0, positions.carrier.col); // Still there
     });

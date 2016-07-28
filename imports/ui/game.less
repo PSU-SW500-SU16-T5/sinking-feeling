@@ -1,27 +1,47 @@
-@cell-size: 32px;
-
-.game-meta-data {
-  h3 {
-    font-size: 100%;
+.game-lead {
+  p.players {
     font-weight: bold;
-    padding-bottom: 0;
-    margin-bottom: 0;
+    margin-bottom: 3px;
+  }
+
+  p.turn {
+    margin-bottom: 12px;
   }
 }
 
-ul.sunkships {
-  list-style-type: none;
-  display: inline;
-  padding: 0;
+.ship-status {
+  ul {
+    list-style-type: none;
+    display: inline-block;
+    padding: 0;
+    margin: 0 5px;
 
-  li {
-    display: inline;
+    li {
+      display: inline;
+    }
   }
 
-  li:after {
-    content: ", ";
+  ul.sunk:before {
+    content: "Sunk: "
   }
-  li:last-child:after {
-    content: "";
+  ul.unsunk:before {
+    content: "Remaining: "
+  }
+}
+
+.game-log {
+  .panel-body {
+    text-align: left;
+
+    ol {
+      list-style-type: none;
+      display: block;
+      padding: 0;
+
+      li {
+        padding-left: 2em;
+        text-indent: -2em;
+      }
+    }
   }
 }
