@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { assert } from 'meteor/practicalmeteor:chai';
 import { _ } from 'meteor/underscore';
 import * as Board from './board.js';
+import * as Ship from './ship.js';
 import * as AI from './ai.js';
 
 describe('api/ai.js', function() {
@@ -90,12 +91,56 @@ describe('api/ai.js', function() {
           const state = {};
           const makeMove = function() {
             const move = ai.makeMove(board, state);
-            board.squares[move.row][move.col].state = 'X';
+            board.squares[move.row][move.col].state = 'M';
           };
           for(let i = 0; i < 100; i++) {
             makeMove();
           }
           assert.throws(makeMove, Meteor.Error, 'no-moves-left');
+        });
+        it('should find all ships before makeMove returns no-moves-left', function() {
+          const ai = AI.getPlayer(name);
+          const board = {
+            squares: Board.makeEmptyBoard(),
+            sunk: [],
+          };
+          const types = Ship.types;
+          for(let i = 0; i < 5; i++) {
+            const type = types[i];
+            Board.setRange(board.squares, i, 0, 1, Ship.lengths[type], 'ship', 'Horizontal');
+          }
+          const state = {};
+          const checkShip = function(row, len) {
+            for(let i = 0; i < len; i++) {
+              if(board.squares[row][i].state === 'E') return false;
+            }
+            return true;
+          };
+          const checkSunk = function() {
+            const sunk = [];
+            for(let i = 0; i < 5; i++) {
+              const type = types[i];
+              const len = Ship.lengths[type];
+              if(checkShip(i, len)) {
+                sunk.push(type);
+                Board.setRange(board.squares, i, 0, 1, len, 'state', 'X');
+              }
+            }
+            return sunk;
+          };
+          const makeMove = function() {
+            const move = ai.makeMove(board, state);
+            if('ship' in board.squares[move.row][move.col]) {
+              board.squares[move.row][move.col].state = 'H';
+              board.sunk = checkSunk();
+            } else {
+              board.squares[move.row][move.col].state = 'M';
+            }
+          };
+          for(let i = 0; i < 101 && board.sunk.length < 5; i++) {
+            makeMove();
+          }
+          assert(true);
         });
         if(name != 'invalid-name') {
           it('should treat name without case sensitivity', function() {

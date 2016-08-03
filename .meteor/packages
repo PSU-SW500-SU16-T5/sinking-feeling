@@ -34,3 +34,4 @@ useraccounts:bootstrap
 useraccounts:flow-routing
 momentjs:moment
 session
+lmieulet:meteor-coverage

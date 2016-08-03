@@ -2,6 +2,21 @@ import { assert } from 'meteor/practicalmeteor:chai';
 import * as Square from './square.js';
 
 describe('api/square.js', function() {
+  describe('spaceShip', function() {
+    it('returns false when no ship has the space', function() {
+      const ships = { carrier: { row: 0, col: 0, vertical: false } };
+      const space = { row: 5, col: 5 };
+      const type = Square.spaceShip(space, ships);
+      assert.isFalse(type);
+    });
+    it('returns the type when a ship has the space', function() {
+      const ships = { carrier: { row: 0, col: 0, vertical: false } };
+      const space = { row: 0, col: 1 };
+      const type = Square.spaceShip(space, ships);
+      assert.equal(type, 'carrier');
+    });
+  });
+
   describe('spacesAreSame', function() {
     it('returns true when row and col are same', function() {
       const space1 = {row: 1, col: 2};

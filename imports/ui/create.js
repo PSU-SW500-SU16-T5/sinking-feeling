@@ -99,6 +99,7 @@ Template.create_game.events({
     } else {
       Game.initToWaiting(game);
     }
+    Game.checkAndUpdate(game);
 
     FlowRouter.go('game', { id: game._id });
   },

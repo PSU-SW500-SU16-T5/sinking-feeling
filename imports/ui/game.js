@@ -166,6 +166,7 @@ Template.game_confirmations.events({
     const user = Meteor.user();
     const player = Game.getUserPlayer(game, user);
     Game.resign(game, player);
+    Game.checkAndUpdate(game);
     FlowRouter.go('game', {id: game._id});
   },
 });
@@ -279,8 +280,7 @@ Template.game_actions.events({
 
     // Get shot information (TODO: Check if shot is valid!)
     Game.fire(game, move.row, move.col);
-    Game.checkState(game);
-    Game.update(game);
+    Game.checkAndUpdate(game);
 
     Session.set('move', null);
   },
@@ -294,6 +294,7 @@ Template.game_actions.events({
     }
 
     Game.joinWaiting(game, user);
+    Game.checkAndUpdate(game);
   },
   'click .acceptInvite'(event) {
     event.preventDefault();
@@ -301,6 +302,7 @@ Template.game_actions.events({
     const user = Meteor.user();
     if(user._id === game.challenger.id) {
       Game.respondToPending(game, true);
+      Game.checkAndUpdate(game);
     } else {
       throw new Meteor.Error('not-your-game');
     }
@@ -311,6 +313,7 @@ Template.game_actions.events({
     const user = Meteor.user();
     if(user._id === game.challenger.id) {
       Game.respondToPending(game, false);
+      Game.checkAndUpdate(game);
     } else {
       throw new Meteor.Error('not-your-game');
     }
@@ -349,8 +352,7 @@ Template.game_actions.events({
     const player = Game.getUserPlayer(game, user);
 
     game[player].ready = true;
-    Game.checkState(game);
-    Game.update(game);
+    Game.checkAndUpdate(game);
   },
 });
 

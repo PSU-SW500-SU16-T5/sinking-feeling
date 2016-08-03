@@ -44,11 +44,8 @@ export function initVsAi(game, ai) {
   game.challenger.ai = ai;
   game.challenger.name = AI.getPlayer(ai).full_name;
   game.challenger.ready = true;
+  game.challenger.ready_at = new Date();
   game.state = 'setup';
-  game.creator.ready_at = new Date();
-
-  checkState(game);
-  update(game);
   return game;
 }
 
@@ -57,25 +54,16 @@ export function initToPending(game, user) {
   game.challenger.name = user.username;
   game.challenger.response = 'none';
   game.state = 'pending';
-
-  checkState(game);
-  update(game);
   return game;
 }
 
 export function respondToPending(game, join) {
   game.challenger.response = join ? 'accept' : 'decline';
-
-  checkState(game);
-  update(game);
   return game;
 }
 
 export function initToWaiting(game) {
   game.state = 'waiting';
-
-  checkState(game);
-  update(game);
   return game;
 }
 
@@ -83,9 +71,6 @@ export function joinWaiting(game, user) {
   game.challenger.id = user._id;
   game.challenger.name = user.username;
   game.state = 'setup';
-
-  checkState(game);
-  update(game);
   return game;
 }
 
@@ -215,18 +200,6 @@ export function checkState(game) {
   } else {
     throw Meteor.Error('invalid-state', 'The game has an invalid state');
   }
-
-  // TODO: This changes setup to active and should go away when we implement
-  // ship placement in the UI.
-  /*
-  if(game.state === 'setup') {
-    game.creator.ready = true;
-    game.creator.ready_at = new Date();
-    game.challenger.ready = true;
-    game.creator.ready_at = new Date();
-    states.setup(game);
-  }
-  */
 }
 
 export function remove(game, player) {
@@ -273,7 +246,10 @@ export function resign(game, player) {
   game.time_finished = new Date();
 
   delete game.current_player;
+}
 
+export function checkAndUpdate(game) {
+  checkState(game);
   update(game);
 }
 

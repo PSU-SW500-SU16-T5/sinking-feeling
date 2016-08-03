@@ -105,23 +105,100 @@ describe('api/game.js', function() {
     });
   });
 
-  describe('update', function() {
-    let user = {};
-    beforeEach(function(){
-      Meteor.call('test.resetDatabase');
-      user = {_id: 'test', username: 'Test User'};
+  describe('initVsAi', function() {
+    let game;
+    beforeEach(function() {
+      game = { challenger: {} };
     });
-    it('should update as expected', function(){
-      const game = Game.create(user);
-      const gameID = game._id;
+    it('should set challenger.ai', function() {
+      Game.initVsAi(game, 'sue');
+      assert.propertyVal(game.challenger, 'ai', 'sue');
+    });
+    it('should set challenger.name', function() {
+      Game.initVsAi(game, 'sue');
+      assert.propertyVal(game.challenger, 'name', 'Sequential Sue');
+    });
+    it('should set challenger.ready to true', function() {
+      Game.initVsAi(game, 'sue');
+      assert.propertyVal(game.challenger, 'ready', true);
+    });
+    it('should set challenger.ready_at', function() {
+      Game.initVsAi(game, 'sue');
+      assert.property(game.challenger, 'ready_at');
+    });
+    it('should set state to setup', function() {
+      Game.initVsAi(game, 'sue');
+      assert.propertyVal(game, 'state', 'setup');
+    });
+  });
 
-      assert.notProperty(game, 'theanswer');
+  describe('initToPending', function() {
+    let game, user;
+    beforeEach(function() {
+      game = { challenger: {} };
+      user = { _id: 'test', username: 'Test Challenger' };
+    });
+    it('should set challenger.id', function() {
+      Game.initToPending(game, user);
+      assert.propertyVal(game.challenger, 'id', user._id);
+    });
+    it('should set challenger.name', function() {
+      Game.initToPending(game, user);
+      assert.propertyVal(game.challenger, 'name', user.username);
+    });
+    it('should set challenger.response to none', function() {
+      Game.initToPending(game, user);
+      assert.propertyVal(game.challenger, 'response', 'none');
+    });
+    it('should set state to pending', function() {
+      Game.initToPending(game, user);
+      assert.propertyVal(game, 'state', 'pending');
+    });
+  });
 
-      game.theanswer = 42;
-      Game.update(game);
+  describe('respondToPending', function() {
+    let game;
+    beforeEach(function() {
+      game = { challenger: {} };
+    });
+    it('should set challenger.response to accept when join is true', function() {
+      Game.respondToPending(game, true);
+      assert.propertyVal(game.challenger, 'response', 'accept');
+    });
+    it('should set challenger.response to decline when join is false', function() {
+      Game.respondToPending(game, false);
+      assert.propertyVal(game.challenger, 'response', 'decline');
+    });
+  });
 
-      const result = Games.findOne({_id: gameID});
-      assert.propertyVal(result, 'theanswer', 42);
+  describe('initToWaiting', function() {
+    let game;
+    beforeEach(function() {
+      game = {};
+    });
+    it('should set state to waiting', function() {
+      Game.initToWaiting(game);
+      assert.propertyVal(game, 'state', 'waiting');
+    });
+  });
+
+  describe('joinWaiting', function() {
+    let game, user;
+    beforeEach(function() {
+      game = { challenger: {} };
+      user = { _id: 'test', username: 'Test Challenger' };
+    });
+    it('should set challenger.id', function() {
+      Game.joinWaiting(game, user);
+      assert.propertyVal(game.challenger, 'id', user._id);
+    });
+    it('should set challenger.name', function() {
+      Game.joinWaiting(game, user);
+      assert.propertyVal(game.challenger, 'name', user.username);
+    });
+    it('should set state to setup', function() {
+      Game.joinWaiting(game, user);
+      assert.propertyVal(game, 'state', 'setup');
     });
   });
 
@@ -135,16 +212,42 @@ describe('api/game.js', function() {
     it('should not fail', function() {
       Game.checkStateWaiting({});
     });
+    it('should trigger on the right conditions', function() {
+      const game = { challenger: { id: 'test' } };
+      Game.checkStateWaiting(game);
+      assert.propertyVal(game, 'state', 'setup');
+    });
   });
 
   describe('checkStatePending', function() {
-    it('should not fail', function() {
-      const game = {
+    let game;
+    beforeEach(function() {
+      game = {
         challenger: {
           response: 'none',
         },
       };
+    });
+    it('should not fail', function() {
       Game.checkStatePending(game);
+    });
+    it('should trigger setup on accept', function() {
+      game.challenger.response = 'accept';
+      Game.checkStatePending(game);
+      assert.propertyVal(game, 'state', 'setup');
+      assert.notProperty(game.challenger, 'response');
+    });
+    it('should trigger declined on decline', function() {
+      game.challenger.response = 'decline';
+      Game.checkStatePending(game);
+      assert.propertyVal(game, 'state', 'declined');
+      assert.notProperty(game.challenger, 'response');
+    });
+    it('should trigger declined if removed', function() {
+      game.challenger.remove = true;
+      Game.checkStatePending(game);
+      assert.propertyVal(game, 'state', 'declined');
+      assert.notProperty(game.challenger, 'response');
     });
   });
 
@@ -275,7 +378,7 @@ describe('api/game.js', function() {
     });
   });
 
-  describe('checkAiFirstShot', function(){
+  describe('checkAiFirstShot', function() {
     let game = {};
     beforeEach(function() {
       game = {
@@ -285,19 +388,16 @@ describe('api/game.js', function() {
         challenger: {},
       };
     });
-    it('should proceede normally for creator as first player', function(){
+    it('should proceed normally for creator as first player', function(){
       Game.checkAiFirstShot(game);
-
       assert.equal(game.turn_number, 0);
     });
-    it('should proceede normally with no ai', function(){
+    it('should proceed normally with no ai', function(){
       game.first_player = 'challenger';
-
       Game.checkAiFirstShot(game);
-
       assert.equal(game.turn_number, 0);
     });
-    it('shoot when ai challenger first', function(){
+    it('should shoot when ai challenger first', function() {
       game.first_player = 'challenger';
       game.current_player = 'challenger';
       game.challenger.ai = 'a value';
@@ -440,7 +540,27 @@ describe('api/game.js', function() {
     });
   });
 
-  describe('save a shot', function() {
+  describe('update', function() {
+    let user = {};
+    beforeEach(function(){
+      Meteor.call('test.resetDatabase');
+      user = {_id: 'test', username: 'Test User'};
+    });
+    it('should update as expected', function(){
+      const game = Game.create(user);
+      const gameID = game._id;
+
+      assert.notProperty(game, 'theanswer');
+
+      game.theanswer = 42;
+      Game.update(game);
+
+      const result = Games.findOne({_id: gameID});
+      assert.propertyVal(result, 'theanswer', 42);
+    });
+  });
+
+  describe('saveShot', function() {
     it('shot added to array', function() {
       const shots = [];
       const shot = {row: 0, col: 0};
@@ -537,7 +657,7 @@ describe('api/game.js', function() {
     });
   });
 
-  describe('check shot doesnt exit', function() {
+  describe('checkShotUnique', function() {
     it('first shot', function(){
       const shot = {row: 0, col: 0};
       const shots = [];
@@ -558,7 +678,7 @@ describe('api/game.js', function() {
     });
   });
 
-  describe('player shot', function() {
+  describe('playerShot', function() {
     it('added to array', function () {
       var row = 7;
       var col = 8;
@@ -896,7 +1016,7 @@ describe('api/game.js', function() {
     });
   });
 
-  describe('opposite user', function(){
+  describe('oppositePlayer', function(){
     it('creator', function(){
       var user = 'creator';
       var expected = 'challenger';
