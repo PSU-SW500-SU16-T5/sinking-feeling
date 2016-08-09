@@ -6,7 +6,7 @@ export const difficulty = 0;
 export const difficulty_name = "Trivial";
 export const description = "Sequential Sue is a trivially easy player to " +
 "beat: she makes her turns in a predicatable sequence, starting at the top " +
-"right corner of the board.";
+"left corner of the board.";
 
 export function makeMove(board) {
   const squares = board.squares;

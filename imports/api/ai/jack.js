@@ -7,10 +7,10 @@ export const full_name = 'Geometric Jack';
 export const difficulty = 2;
 export const difficulty_name = "Easy";
 export const description = "Geometric Jack is a fairly easy player to beat. " +
-"Like Ralph, he starts out by targeting the board at random. However, once " +
-"he hits a ship, he focuses his shots on that area until he's convinced " +
-"there's nothing left to sink there. Unfortunately, he's a bit overzealous " +
-"and tends to waste time clearing around a ship even after its sunk.";
+"Like Ralph, he starts out firing at random. However, after hitting a ship, " +
+"he focuses his shots on the surrounding area until he's convinced there's " +
+"nothing left to sink there. Unfortunately, he's a bit overzealous and tends " +
+"to waste time clearing around a ship even after it's been sunk.";
 
 export function addOpenNeighbors(targets, squares, row, col) {
   if(row > 0 && squares[row-1][col].state === 'E') {

@@ -1,7 +1,7 @@
 <template name="rules">
 	<h2>Game Rules</h2>
 	<p>
-		Battleship is a two-player game. Each player has a hidden board where they place ships prior to the start of the game. Once the game begins, players take turns firing shots at the opponent's board in at attempt to sink their ships. The first play to sink all of the opponent's ships wins.
+		Battleship is a two-player game. Each player has a hidden board where they place ships prior to the start of the game. Once the game begins, players take turns firing shots at the opponent's board in at attempt to sink their ships. The first player to sink all of the opponent's ships wins.
 	</p>
 	<h3>Game Components</h3>
 	<p>
@@ -19,13 +19,13 @@
 				Columns are labeled with numbers, from left to right: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10.
 			</li>
 			<li>
-				Squares are labeled with their column and row. For example, the top right corner is A-10.
+				Squares are identified by row and column. For example, the top right corner is A10.
 			</li>
 		</ul>
 	</ul>
 	<ul>
 		<li>
-			Five ships for each player. Each ship occupies a consecutive series of grid squares on the game board, either horizontally or vertically. The player's five ships have different sizes:
+			Five ships for each player. Each ship occupies a consecutive series of squares on the game board, either horizontally or vertically. The player's five ships have different sizes:
 		</li>
 		<ul>
 			<li>
@@ -47,7 +47,6 @@
 	</ul>
 	<p>
 		Each player may always see the placement of ships on their own game board. The placement of ships on the opponent's game board is initially a secret; occupied spaces are revealed during gameplay.
-		Game Setup
 	</p>
 	<h3>Game Setup</h3>
 		<p>
@@ -58,7 +57,7 @@
 		</p>
 	<h3>Gameplay</h3>
 		<p>
-			The players must decide who goes first. Players alternate turns taking shots to try to hit the opponent's ships.
+			Players alternate turns taking shots to try to hit the opponent's ships.
 		</p>
 		<p>
 			To take a shot, a player selects a target square on their view of the opponent's board. If the square is not occupied as a ship, then it is a miss. If the square is occupied by a ship, then it is a hit. If all squares on a ship have been hit, then the ship is sunk. The results of the shot are presented on both players' versions of the opponent's board.
@@ -67,6 +66,6 @@
 			When a player sinks a ship, the player is told which ship was sunk and which squares that ship occupied.
 		</p>
 		<p>
-			If a player's shot sink's the opponent's final ship, then the player wins the game.
+			If a player's shot sinks the opponent's final ship, then the player wins the game.
 		</p>
 </template>

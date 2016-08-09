@@ -11,13 +11,13 @@ export const name = 'pat';
 export const full_name = 'Partitioning Pat';
 export const difficulty = 4;
 export const difficulty_name = "Moderate";
-export const description = "Partionting Pat is smart enough to take the " +
+export const description = "Partitioning Pat is smart enough to take the " +
 "lengths of ships into consideration. She starts out by partitioning the " +
 "board with her shots to catch the ships with length 4 or more (the carrier " +
 "and the battleship). Once they're out of the way, she fills the remaining " +
-"space in a checkerboard pattern. However, her behavior upon hitting a ship " +
-"is the same as Jack's: she focuses on clearing around the ship until she's " +
-"certain nothing is left in that area.";
+"space in a checkerboard pattern. Her behavior upon hitting a ship is the " +
+"same as Jack's: she focuses on clearing around the ship until she's certain " +
+"nothing is left in that area.";
 
 // Return the length of the longest unsunk ship
 export function largestUnsunkShip(sunk) {
